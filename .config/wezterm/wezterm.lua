@@ -6,6 +6,8 @@ local config = wezterm.config_builder()
 config:set_strict_mode(true)
 
 -- todo:
+-- use GLOBAL to store paths?
+-- https://wezfurlong.org/wezterm/config/lua/wezterm/GLOBAL.html
 -- unicode input
 -- rest of workspaces
 -- get rid of the resize warning
@@ -191,12 +193,12 @@ end)
 -- -- -- TAB BAR -- -- --
 
 -- config.hide_tab_bar_if_only_one_tab = true
--- config.window_padding = {
---     left = 2,
---     right = 2,
---     top = 0,
---     bottom = 0,
--- }
+config.window_padding = {
+  left = 10,
+  right = 10,
+  top = 0,
+  bottom = 3,
+}
 
 -- update plugins
 -- wezterm.plugin.update_all()
