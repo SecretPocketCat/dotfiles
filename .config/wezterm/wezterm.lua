@@ -7,8 +7,6 @@ config:set_strict_mode(true)
 
 -- todo:
 -- unicode input
--- weird tab bar color
--- weird tab bar transparency (the slanted bgs are half-transparent)
 -- rest of workspaces
 -- get rid of the resize warning
 -- float the error dialog window (same class as parent?)
@@ -190,10 +188,6 @@ wezterm.on('gui-startup', function(cmd)
   repo_select(window:gui_window(), pane, true, true)
 end)
 
--- wezterm.on('update-right-status', function(window, pane)
---   window:set_right_status(window:active_workspace())
--- end)
-
 -- -- -- TAB BAR -- -- --
 
 -- config.hide_tab_bar_if_only_one_tab = true
@@ -235,5 +229,12 @@ wezterm.plugin.require("https://github.com/SecretPocketCat/wezterm-bar").apply_t
     },
   },
 })
+
+config.colors = {
+  tab_bar = {
+    -- "#cba6f7"
+    background = "rgba(20,0,50,0.35)"
+  }
+}
 
 return config
