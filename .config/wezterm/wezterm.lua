@@ -6,6 +6,7 @@ local config = wezterm.config_builder()
 config:set_strict_mode(true)
 
 -- todo:
+-- get rid of the extra padding at the bottom
 -- unicode input
 -- rest of workspaces
 -- get rid of the resize warning
@@ -15,6 +16,7 @@ config:set_strict_mode(true)
 local workspace_roots = {
   work = "~/work",
   gamedev = "~/gamedev",
+  hobby = "~/projects",
 }
 
 local function trim(s, trimmed)
@@ -200,8 +202,8 @@ end)
 
 -- config.hide_tab_bar_if_only_one_tab = true
 config.window_padding = {
-  left = 10,
-  right = 10,
+  left = 5,
+  right = 5,
   top = 0,
   bottom = 3,
 }
@@ -210,7 +212,7 @@ config.window_padding = {
 -- wezterm.plugin.update_all()
 
 wezterm.plugin.require("https://github.com/SecretPocketCat/wezterm-bar").apply_to_config(config, {
-  position = "bottom",
+  position = "top",
   max_width = 30,
   dividers = "slant_right", -- or "slant_left", "arrows", "rounded", false
   indicator = {
@@ -241,7 +243,7 @@ wezterm.plugin.require("https://github.com/SecretPocketCat/wezterm-bar").apply_t
 config.colors = {
   tab_bar = {
     -- "#cba6f7"
-    background = "rgba(20,0,50,0.35)"
+    -- background = "rgba(20,0,50,0.35)"
   }
 }
 
