@@ -1,0 +1,74 @@
+@import "mocha_colours.css";
+
+* {
+  font-size: 18px;
+  font-family: monospace;
+}
+
+window#waybar {
+  background: @surface0;
+  color: @text;
+}
+
+window#waybar.empty #window {
+  color: transparent;
+}
+
+#custom-right-arrow-dark,
+#custom-left-arrow-dark {
+  color: @mantle;
+}
+#custom-right-arrow-light,
+#custom-left-arrow-light {
+  color: @surface0;
+  background: @mantle;
+}
+
+#workspaces,
+#window,
+#clock.1,
+#clock.2,
+#clock.3,
+#pulseaudio,
+#memory,
+#cpu,
+#battery,
+#disk,
+#tray {
+  background: @mantle;
+}
+
+#workspaces button {
+  padding: 0 2px;
+  border: none;
+
+  transition: color 130ms ease-in-out;
+}
+#workspaces button.active {
+  color: @purple_accent;
+}
+#workspaces button:hover {
+  color: @mauve;
+}
+
+#pulseaudio {
+  color: @sapphire;
+}
+#cpu {
+  color: @blue;
+}
+#memory {
+  color: @lavender;
+}
+#disk {
+  color: @mauve;
+}
+
+#clock,
+#pulseaudio,
+#memory,
+#cpu,
+#battery,
+#disk {
+  padding: 0 12px;
+}

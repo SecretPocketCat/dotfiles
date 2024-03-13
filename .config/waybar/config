@@ -1,0 +1,212 @@
+{
+  "layer": "top",
+  "position": "top", // (top|bottom|left|right)
+  "height": 32, //  remove for auto height
+  // "spacing": 6, // Gaps between modules (4px)
+
+  // Layout
+  "modules-left": [
+    "hyprland/workspaces",
+    "custom/right-arrow-dark",
+    "custom/right-arrow-light",
+    "hyprland/window",
+    "custom/right-arrow-dark"
+
+    //"custom/media"
+  ],
+  "modules-center": [
+    "custom/left-arrow-dark",
+    "clock#1",
+    "custom/left-arrow-light",
+    "custom/left-arrow-dark",
+    "clock#2",
+    "custom/right-arrow-dark",
+    "custom/right-arrow-light",
+    "clock#3",
+    "custom/right-arrow-dark"
+  ],
+  "modules-right": [
+    // "mpd", // music player daemon
+    // "idle_inhibitor",
+    // "bluetooth",
+    "custom/left-arrow-dark",
+    "pulseaudio",
+    "custom/left-arrow-light",
+    "custom/left-arrow-dark",
+    "cpu",
+    "custom/left-arrow-light",
+    "custom/left-arrow-dark",
+    // "temperature",
+    // "custom/left-arrow-light",
+    // "custom/left-arrow-dark",
+    "memory",
+    "custom/left-arrow-light",
+    "custom/left-arrow-dark",
+    "disk"
+    // "custom/left-arrow-light",
+    // "custom/left-arrow-dark",
+    // "backlight",
+    // "custom/left-arrow-light",
+    // "custom/left-arrow-dark",
+    // "keyboard-state"
+  ],
+
+  "reload_style_on_change": true,
+  // Modules configuration
+
+  // arrows
+  "custom/left-arrow-dark": {
+    "format": "",
+    "tooltip": false
+  },
+  "custom/left-arrow-light": {
+    "format": "",
+    "tooltip": false
+  },
+  "custom/right-arrow-dark": {
+    "format": "",
+    "tooltip": false
+  },
+  "custom/right-arrow-light": {
+    "format": "",
+    "tooltip": false
+  },
+
+  // workspaces & media
+  "hyprland/workspaces": {
+    "show-special": true,
+    "disable-scroll": true,
+    "format": " {name}: {icon} ",
+    "format-icons": {
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": "",
+      "5": "",
+      "special": ""
+    }
+    // "format": "<sub>{icon}</sub>{windows}",
+    // "window-rewrite-default": "",
+    // "window-rewrite": {
+    //   // "title<.*youtube.*>": "", // Windows whose titles contain "youtube"
+    //   "class<firefox>": "", // Windows whose classes are "firefox"
+    //   "kitty": "", // Windows that contain "foot" in either class or title. For optimization reasons, it will only match against a title if at least one other window explicitly matches against a title.
+    //   "code": "󰨞"
+    // }
+  },
+
+  "hyprland/window": {
+    "format": " {class}: {title} ",
+    "rewrite": {
+      "(.*) (— Mozilla Firefox.*)": "$1 ",
+      " code-url-handler: (?:\\[\\])? - (.*)": " code: $1"
+    },
+    "max-length": 200
+  },
+
+  "mpd": {
+    "format": "{stateIcon} {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}{artist} - {album} - {title} ({elapsedTime:%M:%S}/{totalTime:%M:%S}) ⸨{songPosition}|{queueLength}⸩ {volume}% ",
+    "format-disconnected": "Disconnected ",
+    "format-stopped": "{consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped ",
+    "unknown-tag": "N/A",
+    "interval": 2,
+    "consume-icons": {
+      "on": " "
+    },
+    "random-icons": {
+      "off": "<span color=\"#f53c3c\"></span> ",
+      "on": " "
+    },
+    "repeat-icons": {
+      "on": " "
+    },
+    "single-icons": {
+      "on": "1 "
+    },
+    "state-icons": {
+      "paused": "",
+      "playing": ""
+    },
+    "tooltip-format": "MPD (connected)",
+    "tooltip-format-disconnected": "MPD (disconnected)"
+  },
+
+  // datetime
+  "clock#1": {
+    "format": "{:%a}",
+    "tooltip": false
+  },
+  "clock#2": {
+    "format": "{:%H:%M:%OS}",
+    "interval": 1,
+    "tooltip": false
+  },
+  "clock#3": {
+    "format": "{:%d/%m/%Y}",
+    "tooltip": false
+  },
+
+  // resources
+  "pulseaudio": {
+    // "scroll-step": 1, // %, can be a float
+    "format": "{icon} {volume}% {format_source}",
+    "format-bluetooth": "{volume}% {icon} {format_source}",
+    "format-bluetooth-muted": " {icon} {format_source}",
+    "format-muted": " {format_source}",
+    "format-source": " {volume}%",
+    "format-source-muted": "",
+    "format-icons": {
+      "headphone": "",
+      "hands-free": "",
+      "headset": "",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["", "", ""]
+    },
+    "on-click": "pavucontrol"
+  },
+  "cpu": {
+    "interval": 5,
+    "format": " {usage}%",
+    "tooltip": false
+  },
+  "memory": {
+    "interval": 5,
+    "format": " {}%"
+  },
+  // "temperature": {
+  //   // "thermal-zone": 2,
+  //   // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+  //   // "critical-threshold": 80,
+  //   // "format-critical": "{temperatureC}°C {icon}",
+  //   "format": "{temperatureC}°C {icon}"
+  //   // "format-icons": ["", "", ""]
+  // },
+  "disk": {
+    "interval": 300,
+    "format": " {free} ({percentage_free}%)",
+    "path": "/"
+  }
+  //   "bluetooth": {
+  //     // "controller": "controller1", // specify the alias of the controller if there are more than 1 on the system
+  //     "format": " {status}",
+  //     "format-disabled": "", // an empty format will hide the module
+  //     "format-connected": " {num_connections} connected",
+  //     "tooltip-format": "{controller_alias}\t{controller_address}",
+  //     "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
+  //     "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}"
+  //   },
+  //   "custom/media": {
+  //     "format": "{icon} {}",
+  //     "return-type": "json",
+  //     "max-length": 40,
+  //     "format-icons": {
+  //       "spotify": "",
+  //       "default": "🎜"
+  //     },
+  //     "escape": true,
+  //     "exec": "$HOME/.config/waybar/mediaplayer.py 2> /dev/null" // Script in resources folder
+  //     // "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+  //   }
+}
