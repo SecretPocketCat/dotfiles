@@ -1,6 +1,6 @@
 {
   "layer": "top",
-  "position": "top", // (top|bottom|left|right)
+  "position": "bottom", // (top|bottom|left|right)
   "height": 32, //  remove for auto height
   // "spacing": 6, // Gaps between modules (4px)
 
