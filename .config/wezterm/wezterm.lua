@@ -6,13 +6,16 @@ local config = wezterm.config_builder()
 config:set_strict_mode(true)
 
 -- todo:
--- use GLOBAL to store paths?
--- https://wezfurlong.org/wezterm/config/lua/wezterm/GLOBAL.html
 -- unicode input
 -- rest of workspaces
 -- get rid of the resize warning
 -- float the error dialog window (same class as parent?)
 -- repo selection sort based on frecency
+
+local workspace_roots = {
+  work = "~/work",
+  gamedev = "~/gamedev",
+}
 
 local function trim(s, trimmed)
   local patt = string.format("^%s*(.-)%s*$", trimmed, trimmed)
@@ -46,30 +49,35 @@ local function split(str, sep)
 end
 
 local function get_repo_select_options(workspace, add_cancel)
-  local env_key = 'WORKSPACE_' .. workspace
-  local paths = os.getenv(env_key)
-  if not paths then
-    wezterm.log_warn("No paths for workspace " .. workspace .. " found in ENV: " .. env_key)
-  end
+  local options = wezterm.GLOBAL.workspace_repo_options
 
-  local repos = {};
-  local paths = split(paths, ";");
+  if not options then
+    local workspace_root = workspace_roots[workspace]
+    local repo_paths = wezterm.split_by_newlines(execute_command("find " ..
+      workspace_root .. " -name .git -exec dirname {} \\; -prune"))
+    local repos = {}
+    for _, path in pairs(repo_paths) do
+      -- parts of the regex are repeated, 'cause {1,2} does not seem to work in lua
+      local name = path:match("[^/\\]+[/\\][^/\\]+$")
+      table.insert(repos, {
+        -- name
+        label = name,
+        -- path
+        id = path,
+      })
+    end
 
-  for _, pair in pairs(paths) do
-    local i, _ = pair:find(":", 0, true)
-    table.insert(repos, {
-      label = pair:sub(0, i - 1),
-      id = pair:sub(i + 1),
-    })
+    options = repos
+    wezterm.GLOBAL.workspace_repo_options = repos
   end
 
   if add_cancel then
-    table.insert(repos, {
+    table.insert(options, {
       label = "Cancel"
     })
   end
 
-  return repos
+  return options
 end
 
 local function open_repo_layout_tab(window, path, name, replace_tab)
@@ -121,8 +129,6 @@ local function repo_select(window, pane, replace_tab, strict_cancel)
     act.InputSelector {
       action = wezterm.action_callback(
         function(_, _, path, name)
-          print(name);
-          print(path)
           if path and name then
             open_repo_layout_tab(window, path, name, replace_tab);
           elseif strict_cancel and not name and not path then
