@@ -19,12 +19,6 @@ local workspace_roots = {
   hobby = "~/projects",
 }
 
-local function trim(s, trimmed)
-  local patt = string.format("^%s*(.-)%s*$", trimmed, trimmed)
-  -- wezterm.log_info(patt)
-  return s:match(patt)
-end
-
 local function execute_command(command)
   local handle = io.popen(command)
   local result = handle:read("*a")
@@ -32,9 +26,31 @@ local function execute_command(command)
   return result
 end
 
-local function active_win_class()
-  local cmd = "hyprctl activewindow -j | jq '.class'"
-  return execute_command(cmd):match("wez_([^\"]+)")
+local function notify(text)
+  execute_command("notify-send -t 100000 -u low " .. text)
+end
+
+local function trim(s, trimmed)
+  local patt = string.format("^%s*(.-)%s*$", trimmed, trimmed)
+  -- wezterm.log_info(patt)
+  return s:match(patt)
+end
+
+local function get_gui_pid()
+  local pid = wezterm.procinfo.pid()
+  local pinfo = wezterm.procinfo.get_info_for_pid(pid)
+
+  while pinfo.name ~= "wezterm-gui" do
+    pinfo = wezterm.procinfo.get_info_for_pid(pinfo.ppid)
+  end
+
+  return pinfo.pid
+end
+
+local function gui_class_workspace()
+  local pid = get_gui_pid()
+  local class = execute_command("hyprctl clients -j | jq '.[] | select(.pid == " .. pid .. ") | .class'")
+  return class:match("wez_([^\"]+)")
 end
 
 local function split(str, sep)
@@ -114,7 +130,7 @@ end
 local char_alphabet = 'tsrneiaoplfuwyzkjbvm'
 
 local function repo_select(window, pane, replace_tab, strict_cancel)
-  local workspace = active_win_class()
+  local workspace = gui_class_workspace()
   if not workspace then
     wezterm.log_warn("No current workspace")
   end
