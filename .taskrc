@@ -23,6 +23,26 @@ data.location=/home/spc/.task
 #data.location=~/.local/share/task
 #hooks.location=~/.config/task/hooks
 
+# Term
+editor=hx
+
+# Misc
+complete.all.projects=true
+list.all.projects=true
+complete.all.tags=true
+list.all.tags=true
+
+# Dates
+dateformat=(a) D/M/Y
+weekstart=Monday
+
+# Defaults
+# default.project=work
+
+# Hooks
+rc.debug.hooks = 2
+
+# Theme
 # Color theme (uncomment one to use)
 #include light-16.theme
 #include light-256.theme

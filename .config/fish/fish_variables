@@ -2,8 +2,8 @@
 # VERSION: 3.0
 SETUVAR --export EDITOR:hx
 SETUVAR --export FZF_DEFAULT_OPTS:\x2d\x2dcolor\x3dbg\x2b\x3a\x23363a4f\x2cbg\x3a\x2324273a\x2cspinner\x3a\x23f4dbd6\x2chl\x3a\x23ed8796\x20\x2d\x2dcolor\x3dfg\x3a\x23cad3f5\x2cheader\x3a\x23ed8796\x2cinfo\x3a\x23c6a0f6\x2cpointer\x3a\x23f4dbd6\x20\x2d\x2dcolor\x3dmarker\x3a\x23f4dbd6\x2cfg\x2b\x3a\x23cad3f5\x2cprompt\x3a\x23c6a0f6\x2chl\x2b\x3a\x23ed8796
-SETUVAR --export SSH_AGENT_PID:1785
-SETUVAR --export SSH_AUTH_SOCK:/tmp/ssh\x2dXXXXXXQI9HdN/agent\x2e1778
+SETUVAR --export SSH_AGENT_PID:1733
+SETUVAR --export SSH_AUTH_SOCK:/tmp/ssh\x2dXXXXXX4HkDnU/agent\x2e1724
 SETUVAR --export WORKSPACE_gamedev:\x1d
 SETUVAR --export WORKSPACE_work:email\x2dservice\x3a/home/spc/work/bace/email\x2dservice\x3brust\x2dbackend\x3a/home/spc/work/bace/rust\x2dbackend\x3bemail\x2dservice_pre_merge\x3a/home/spc/work/bace/bckp/email\x2dservice_pre_merge\x3bdata_streaming\x3a/home/spc/work/bace/data_streaming\x3bimages\x3a/home/spc/work/bace/images\x3bfluvio\x3a/home/spc/work/bace/fluvio\x3bfluvio_repro_absolute\x3a/home/spc/work/bace/fluvio_repro_absolute\x3bcharts\x3a/home/spc/work/bace/charts
 SETUVAR __fish_initialized:3400
