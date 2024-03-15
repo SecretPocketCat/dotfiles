@@ -192,7 +192,7 @@ config.color_scheme = "Catppuccin Macchiato"
 config.font = wezterm.font 'JetBrains Mono'
 -- disable ligatures
 config.harfbuzz_features = { 'calt=0', 'clig=0', 'liga=0' }
-config.window_background_opacity = 0.8
+-- config.window_background_opacity = 0.985
 -- config.text_background_opacity = 1.
 config.pane_select_font_size = 65
 config.inactive_pane_hsb = {
