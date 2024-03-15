@@ -31,6 +31,7 @@ complete.all.projects=true
 list.all.projects=true
 complete.all.tags=true
 list.all.tags=true
+nag=
 
 # Dates
 dateformat=(a) D/M/Y
