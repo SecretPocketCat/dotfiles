@@ -81,6 +81,7 @@ element-icon {
 element selected {
     background-color:  @selected-col ;
     text-color: @bg-col  ;
+    border-radius: 3px;
 }
 
 mode-switcher {
@@ -104,7 +105,7 @@ message {
     background-color: @bg-col-light;
     margin: 2px;
     padding: 2px;
-    border-radius: 5px;
+    border-radius: 3px;
 }
 
 textbox {
