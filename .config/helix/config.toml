@@ -1,7 +1,7 @@
 theme = "catppuccin_mocha"
 
 [editor]
-line-number = "absolute"
+line-number = "relative"
 cursorline = true
 color-modes = true
 rulers = [80]
@@ -29,30 +29,42 @@ skip-levels = 1
 enable = true
 
 [keys.normal]
+# general CTRL shortcuts
 C-s = ":w"
-A-r = ":config-reload"
 C-a = "select_all"
+
+# enter INSERT mode - insert/append
 r = "insert_mode"
 C-r = "insert_at_line_start"
 R = "append_mode"
+
+# add nl above/below and enter INSERT mode
 a = ["open_below", "insert_mode"]
 A = ["open_above", "insert_mode"]
+
+# select or extend prev/next word
 n = "move_prev_word_start"
 N = "extend_prev_word_start"
 o = "move_next_word_end"
 O = "extend_next_word_end"
+
+# move or extend up/down
 i = "move_visual_line_up"
 I = "extend_line_above"
 e = "move_visual_line_down"
 E = "extend_line_below"
-# line-up
+
+# line-up/down
 C-i = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before", "goto_line_start"]
-# line-down
 C-e = ["keep_primary_selection","extend_to_line_bounds","delete_selection", "paste_after", "goto_line_start"]
+
+
 backspace = "delete_selection_noyank"
+
 # delete selected line
 S-backspace = ["extend_to_line_bounds", "delete_selection_noyank"]
 del = "change_selection_noyank"
+
 # delete selected line and switch to INS mode
 S-del = ["extend_to_line_bounds", "delete_selection_noyank", "insert_mode"]
 esc = ["collapse_selection", "keep_primary_selection"]
@@ -87,6 +99,10 @@ v = "unindent"
 # rmv primary sel
 # split selections?
 
+# disable defaults
+
 [keys.insert]
-C-s = ":w"
+C-s = [":w", "normal_mode"]
+
+# disable defaults
 

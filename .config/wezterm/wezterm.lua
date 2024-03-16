@@ -18,6 +18,7 @@ local workspace_roots = {
   gamedev = "~/gamedev",
   hobby = "~/projects",
 }
+local cancel_id = "cancel";
 
 local function execute_command(command)
   local handle = io.popen(command)
@@ -90,8 +91,10 @@ local function get_repo_select_options(workspace, add_cancel)
   end
 
   if add_cancel then
+    options[#options + 1] = nil
     table.insert(options, {
-      label = "Cancel"
+      label = "Cancel",
+      id = cancel_id,
     })
   end
 
@@ -141,14 +144,18 @@ local function repo_select(window, pane, replace_tab, strict_cancel)
     title = title .. " replace tab"
   end
 
+  if strict_cancel then
+    title = title .. " (strict cancel)"
+  end
+
   window:set_right_status(workspace)
 
   window:perform_action(
     act.InputSelector {
       action = wezterm.action_callback(
         function(_, _, path, name)
-          if path and name then
-            open_repo_layout_tab(window, path, name, replace_tab);
+          if path and name and name ~= cancel_id then
+            open_repo_layout_tab(window, path, name, replace_tab)
           elseif strict_cancel and not name and not path then
             repo_select(window, pane, replace_tab, strict_cancel)
           else
