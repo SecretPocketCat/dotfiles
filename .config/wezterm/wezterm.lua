@@ -128,8 +128,6 @@ local function open_repo_layout_tab(window, path, name, replace_tab)
   editor_pane:send_text('hx . \n')
 end
 
--- -- -- KEYBINDINGS -- -- --
-
 local char_alphabet = 'tsrneiaoplfuwyzkjbvm'
 
 local function repo_select(window, pane, replace_tab, strict_cancel)
@@ -172,22 +170,33 @@ local function repo_select(window, pane, replace_tab, strict_cancel)
   )
 end
 
+-- -- -- KEYBINDINGS -- -- --
+
+config.disable_default_key_bindings = true
+local main_mod = 'ALT'
+local main_mod_shifted = 'SHIFT|' .. main_mod
+
 config.keys = {
   {
+    key = 'p',
+    mods = main_mod,
+    action = act.ActivateCommandPalette,
+  },
+  {
     key = 'w',
-    mods = 'ALT',
+    mods = main_mod,
     action = wezterm.action_callback(repo_select),
   },
   {
     key = 'w',
-    mods = 'SHIFT|ALT',
+    mods = main_mod_shifted,
     action = wezterm.action_callback(function(win, pane)
       repo_select(win, pane, true)
     end),
   },
   {
     key = 's',
-    mods = 'ALT',
+    mods = main_mod,
     action = act.PaneSelect {
       alphabet = char_alphabet,
     },
@@ -209,6 +218,7 @@ config.inactive_pane_hsb = {
 }
 
 -- -- -- INPUT -- -- --
+config.enable_kitty_keyboard = true
 config.use_ime = false
 config.use_dead_keys = false
 -- config.allow_win32_input_mode = true

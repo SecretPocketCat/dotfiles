@@ -5,7 +5,7 @@ line-number = "relative"
 cursorline = true
 color-modes = true
 rulers = [80]
-bufferline = "always"
+bufferline = "multiple"
 jump-label-alphabet = "tsrneiaodhlpfuwymvkz"
 
 [editor.statusline]
@@ -32,15 +32,14 @@ enable = true
 # general CTRL shortcuts
 C-s = ":w"
 C-a = "select_all"
+C-r = "rename_symbol"
+C-k = ":config-reload"
 
 # enter INSERT mode - insert/append
-r = "insert_mode"
-C-r = "insert_at_line_start"
-R = "append_mode"
-
-# add nl above/below and enter INSERT mode
-a = ["open_below", "insert_mode"]
-A = ["open_above", "insert_mode"]
+a = "insert_mode"
+A = "insert_at_line_start"
+r = "append_mode"
+R = "insert_at_line_end"
 
 # select or extend prev/next word
 n = "move_prev_word_start"
@@ -54,52 +53,119 @@ I = "extend_line_above"
 e = "move_visual_line_down"
 E = "extend_line_below"
 
+# jump
+C-o = "jump_forward"
+C-n = "jump_backward"
+J = "save_selection"
+j = "jumplist_picker"
+
 # line-up/down
+# todo: use a specific register for the yanking
 C-i = ["extend_to_line_bounds", "delete_selection", "move_line_up", "paste_before", "goto_line_start"]
 C-e = ["keep_primary_selection","extend_to_line_bounds","delete_selection", "paste_after", "goto_line_start"]
 
+# new line
+ret = "open_below"
+S-ret = "open_above"
 
+# dupe line
+C-ret = ["extend_to_line_bounds", "yank", "paste_after"]
+
+# todo fix: delete binding (also applies to INSERT mode) - might be related to the extended kitty protocol thingy
+# backspace/delete
 backspace = "delete_selection_noyank"
-
-# delete selected line
-S-backspace = ["extend_to_line_bounds", "delete_selection_noyank"]
+S-backspace = ["yank_to_clipboard", "delete_selection_noyank"]
+C-backspace = ["extend_to_line_bounds", "delete_selection_noyank"]
 del = "change_selection_noyank"
+S-del = ["extend_to_line_bounds", "yank_to_clipboard", "delete_selection_noyank", "insert_mode"]
+C-del = ["extend_to_line_bounds", "delete_selection_noyank", "insert_mode"]
 
-# delete selected line and switch to INS mode
-S-del = ["extend_to_line_bounds", "delete_selection_noyank", "insert_mode"]
-esc = ["collapse_selection", "keep_primary_selection"]
-pageup = "half_page_up"
-pagedown = "half_page_down"
-d = "search"
-D = "rsearch"
-C-d = "select_regex"
-t = "search_next"
-T = "search_prev"
-C-t = "search_selection"
-s = "goto_word"
-S = "extend_to_word"
+# Search
+s = "search_next"
+S = "search_prev"
+S-t = "search_selection"
+t = "goto_word"
+T = "extend_to_word"
+v = "select_regex"
+V = "split_selection_on_newline"
+C-h = ["select_all", "select_regex"]
+f = "find_next_char"
+F = "find_prev_char"
+C-f = "repeat_last_motion"
+
+# Comments
 h = "toggle_comments"
-c = "copy_selection_on_next_line"
-C = "copy_selection_on_prev_line"
+H = "toggle_block_comments"
+
+# Selection
+esc = ["collapse_selection", "keep_primary_selection"]
 S-left = "extend_char_left"
 S-right = "extend_char_right"
 S-up = "extend_line_up"
 S-down = "extend_line_down"
-j = "join_selections_space"
-m = "indent"
-v = "unindent"
+
+# LSP/TS/Code stuff
+d = "hover"
+C-d = "goto_definition"
+D = "goto_reference"
+
+# indentation
+tab = "indent"
+S-tab = "unindent"
+
+# inc/decrement numbers
 "+" = "increment"
 "minus" = "decrement"
-"," = "switch_to_lowercase"
-"<" = "switch_to_uppercase"
-"C-," = "switch_case"
-# space = "no_op"
-# todo: yank, paste, replace with yanked
-# jump-list bindings/submenu?
-# rmv primary sel
-# split selections?
+
+# Undo/redo
+C-z = "undo"
+C-y = "redo"
+C-c = "yank_to_clipboard"
+C-v = "replace_selections_with_clipboard"
+# todo: bind this to smt
+p = "paste_clipboard_after"
+P = "paste_clipboard_before"
+C-x = ["yank_to_clipboard", "delete_selection"]
 
 # disable defaults
+
+# Case submenu
+[keys.normal.c]
+l = "switch_to_lowercase"
+u = "switch_to_uppercase"
+# todo - snake_case, UPPER_SNAKE_CASE 
+
+# Selection submenu
+[keys.normal.w]
+t = "trim_selections"
+j = "join_selections"
+e = "expand_selection"
+s = "shrink_selection"
+n = "select_prev_sibling" 
+o = "select_next_sibling" 
+
+# [keys.normal.todo]
+# f = "format_selection"
+
+[keys.normal.l]
+d = "goto_prev_diag"
+D = "goto_first_diag"
+f = "goto_prev_function"
+t = "goto_prev_class"
+a = "goto_prev_parameter"
+c = "goto_prev_comment"
+T = "goto_prev_test"
+p = "goto_prev_paragraph"
+
+[keys.normal.b]
+d = "goto_next_diag"
+D = "goto_last_diag"
+f = "goto_next_function"
+t = "goto_next_class"
+a = "goto_next_parameter"
+c = "goto_next_comment"
+T = "goto_next_test"
+p = "goto_next_paragraph"
 
 [keys.insert]
 C-s = [":w", "normal_mode"]
