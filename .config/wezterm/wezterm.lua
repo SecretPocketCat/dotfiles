@@ -120,29 +120,42 @@ end
 
 local function open_repo_layout_tab(window, path, name, replace_tab)
   local tab_to_close = window:active_tab();
+  local mwin = window:mux_window();
+  local editor_pane
 
-  local tab, build_pane, _ = window:mux_window():spawn_tab {
-    cwd = path,
-  }
-  tab:set_title(name)
-  local editor_pane = build_pane:split {
-    direction = 'Top',
-    size = 0.75,
-    cwd = path,
-  }
-  build_pane:split {
-    direction = 'Right',
-    size = 0.4,
-    cwd = path,
-  }
+  for _, tab in pairs(mwin:tabs()) do
+    if tab:get_title() == name then
+      editor_pane = tab:active_pane()
+      if tab_to_close:get_title() == name then
+        tab_to_close = nil
+      end
+    end
+  end
 
-  if replace_tab then
+  if not editor_pane then
+    local tab, build_pane, _ = mwin:spawn_tab {
+      cwd = path,
+    }
+    tab:set_title(name)
+    editor_pane = build_pane:split {
+      direction = 'Top',
+      size = 0.75,
+      cwd = path,
+    }
+    editor_pane:send_text('hx . \n')
+    build_pane:split {
+      direction = 'Right',
+      size = 0.4,
+      cwd = path,
+    }
+  end
+
+  if replace_tab and tab_to_close then
     tab_to_close:activate();
     window:perform_action(act.CloseCurrentTab { confirm = false }, tab_to_close:active_pane())
   end
 
   editor_pane:activate()
-  editor_pane:send_text('hx . \n')
 end
 
 local char_alphabet = 'tsrneiaoplfuwyzkjbvm'
@@ -150,7 +163,9 @@ local char_alphabet = 'tsrneiaoplfuwyzkjbvm'
 local function repo_select(window, pane, replace_tab, strict_cancel)
   local workspace = gui_class_workspace()
   if not workspace then
+    window:active_tab():set_title("~")
     wezterm.log_warn("No current workspace")
+    return
   end
 
   local repo_options = get_repo_select_options(workspace)
@@ -200,12 +215,12 @@ config.keys = {
     action = act.ActivateCommandPalette,
   },
   {
-    key = 'w',
+    key = 'r',
     mods = main_mod,
     action = wezterm.action_callback(repo_select),
   },
   {
-    key = 'w',
+    key = 'r',
     mods = main_mod_shifted,
     action = wezterm.action_callback(function(win, pane)
       repo_select(win, pane, true)
