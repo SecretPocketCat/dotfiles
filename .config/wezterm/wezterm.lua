@@ -6,7 +6,6 @@ local config = wezterm.config_builder()
 config:set_strict_mode(true)
 
 -- todo:
--- get rid of the extra padding at the bottom
 -- unicode input
 -- rest of workspaces
 -- get rid of the resize warning
@@ -81,8 +80,9 @@ local function get_repo_select_options(workspace, add_cancel)
 
   if not options then
     local workspace_root = workspace_roots[workspace]
+    -- https://stackoverflow.com/a/78010951
     local repo_paths = wezterm.split_by_newlines(execute_command("find " ..
-      workspace_root .. " -name .git -exec dirname {} \\; -prune"))
+      workspace_root .. " ! -type d -prune -o ! -executable -prune -o -name '.git' -prune -o -execdir test -f '{}/.git/HEAD' \\; -print -prune"))
     local repos = {}
     for _, path in pairs(repo_paths) do
       -- parts of the regex are repeated, 'cause {1,2} does not seem to work in lua
