@@ -22,6 +22,10 @@ local extra_repos = {
     {
       id = wezterm.home_dir .. "/dotfiles",
       label = "dotfiles"
+    },
+    {
+      id = wezterm.home_dir .. "/projects/keebs/qmk/keyboards/klor/keymaps/secretpocketcat/",
+      label = "qmk/klor"
     }
   }
 }
