@@ -18,6 +18,15 @@ local workspace_roots = {
   gamedev = "~/gamedev",
   hobby = "~/projects",
 }
+local extra_repos = {
+  hobby = {
+    {
+      id = wezterm.home_dir .. "/dotfiles",
+      label = "dotfiles"
+    }
+  }
+}
+
 local cancel_id = "cancel";
 
 local function execute_command(command)
@@ -84,6 +93,13 @@ local function get_repo_select_options(workspace, add_cancel)
         -- path
         id = path,
       })
+    end
+
+    local extra = extra_repos[workspace];
+    if extra then
+      for _, option in pairs(extra) do
+        table.insert(repos, option)
+      end
     end
 
     options = repos
