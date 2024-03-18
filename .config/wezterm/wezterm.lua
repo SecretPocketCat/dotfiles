@@ -79,7 +79,7 @@ local function split(str, sep)
   return t
 end
 
-local function get_repo_select_options(workspace, add_cancel)
+local function get_repo_select_options(workspace)
   local options = wezterm.GLOBAL.workspace_repo_options
 
   if not options then
@@ -106,16 +106,13 @@ local function get_repo_select_options(workspace, add_cancel)
       end
     end
 
+    table.insert(repos, {
+      id = nil,
+      label = "󰘌 Cancel"
+    })
+
     options = repos
     wezterm.GLOBAL.workspace_repo_options = repos
-  end
-
-  if add_cancel then
-    options[#options + 1] = nil
-    table.insert(options, {
-      label = "Cancel",
-      id = cancel_id,
-    })
   end
 
   return options
@@ -156,7 +153,7 @@ local function repo_select(window, pane, replace_tab, strict_cancel)
     wezterm.log_warn("No current workspace")
   end
 
-  local repo_options = get_repo_select_options(workspace, strict_cancel)
+  local repo_options = get_repo_select_options(workspace)
   local title = workspace .. ' repo';
   if replace_tab then
     title = title .. " replace tab"
