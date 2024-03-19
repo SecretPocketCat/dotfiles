@@ -53,6 +53,10 @@ I = "extend_line_above"
 e = "move_visual_line_down"
 E = "extend_line_below"
 
+# scroll
+pageup = "half_page_up"
+pagedown = "half_page_down"
+
 # jump
 C-o = "jump_forward"
 C-n = "jump_backward"

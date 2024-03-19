@@ -233,6 +233,36 @@ config.keys = {
       alphabet = char_alphabet,
     },
   },
+  {
+    key = 'u',
+    mods = main_mod,
+    action = act.ScrollByPage(0.8),
+  },
+  {
+    key = 'y',
+    mods = main_mod,
+    action = act.ScrollByPage(-0.8),
+  },
+  {
+    key = 'e',
+    mods = main_mod,
+    action = act.ScrollByLine(1),
+  },
+  {
+    key = 'i',
+    mods = main_mod,
+    action = act.ScrollByLine(-1),
+  },
+  {
+    key = 'b',
+    mods = main_mod,
+    action = act.ScrollToBottom,
+  },
+  {
+    key = 'l',
+    mods = main_mod,
+    action = act.ScrollToTop,
+  },
 }
 
 -- -- -- STYLE -- -- --
