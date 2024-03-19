@@ -78,13 +78,13 @@
     "disable-scroll": true,
     "format": " {name}: {icon} ",
     "format-icons": {
-      "1": "",
-      "2": "",
-      "3": "",
-      "4": "",
-      "5": "",
+      "hobby": "",
+      "gamedev": "",
+      "work": "",
+      "media": "",
+      "messaging": "",
       "special": ""
-    }
+    },
     // "format": "<sub>{icon}</sub>{windows}",
     // "window-rewrite-default": "",
     // "window-rewrite": {
@@ -93,6 +93,10 @@
     //   "kitty": "", // Windows that contain "foot" in either class or title. For optimization reasons, it will only match against a title if at least one other window explicitly matches against a title.
     //   "code": "󰨞"
     // }
+    "persistent-workspaces": {
+      "DP-2": ["work", "messaging", "gamedev", "hobby"]
+    },
+    "sort-by": "number"
   },
 
   "hyprland/window": {

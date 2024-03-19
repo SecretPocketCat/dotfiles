@@ -23,6 +23,14 @@ local extra_repos = {
       id = wezterm.home_dir .. "/dotfiles",
       label = "dotfiles"
     },
+        {
+      id = wezterm.home_dir .. "/dotfiles/.config/hypr/",
+      label = "hypr"
+    },
+        {
+      id = wezterm.home_dir .. "/dotfiles/.config/wezterm/",
+      label = "wez"
+    },
     {
       id = wezterm.home_dir .. "/projects/keebs/qmk/keyboards/klor/keymaps/secretpocketcat/",
       label = "qmk/klor"
@@ -63,7 +71,16 @@ end
 local function gui_class_workspace()
   local pid = get_gui_pid()
   local class = execute_command("hyprctl clients -j | jq '.[] | select(.pid == " .. pid .. ") | .class'")
-  return class:match("wez_([^\"]+)")
+  local workspace = class:match("wez_([^\"]+)")
+  if not workspace then
+    workspace = execute_command('hyprctl activeworkspace -j | jq ".name"')
+  end
+
+  if workspace and workspace_roots[workspace] then
+    return workspace
+  end
+
+  return nil
 end
 
 local function split(str, sep)
@@ -304,7 +321,7 @@ config.use_dead_keys = false
 -- -- -- EVENTS -- -- --
 
 wezterm.on('gui-startup', function(cmd)
-  local tab, pane, window = mux.spawn_window({})
+  local _, pane, window = mux.spawn_window({})
   repo_select(window:gui_window(), pane, true, true)
 end)
 
