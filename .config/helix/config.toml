@@ -173,6 +173,7 @@ p = "goto_next_paragraph"
 
 [keys.insert]
 C-s = [":w", "normal_mode"]
+C-v = "replace_selections_with_clipboard"
 
 # disable defaults
 

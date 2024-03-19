@@ -263,6 +263,21 @@ config.keys = {
     mods = main_mod,
     action = act.ScrollToTop,
   },
+  {
+    key = 'n',
+    mods = main_mod,
+    action = act.ActivateTabRelative(-1),
+  },
+  {
+    key = 'o',
+    mods = main_mod,
+    action = act.ActivateTabRelative(1),
+  },
+    {
+    key = 't',
+    mods = main_mod,
+    action = act.ShowLauncherArgs { flags = 'FUZZY|TABS' },
+  },
 }
 
 -- -- -- STYLE -- -- --
