@@ -1,11 +1,8 @@
 if status is-interactive
     # Commands to run in interactive sessions can go here
 
-    # if set -q ZELLIJ
-    # else
-    #     zellij
-    # end
-
+    # autostart zellij
+    eval (zellij setup --generate-auto-start fish | string collect)
 
     set fish_greeting "::<TurboFish>"
 
