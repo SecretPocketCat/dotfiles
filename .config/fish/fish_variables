@@ -5,6 +5,7 @@ SETUVAR --export FZF_DEFAULT_OPTS:\x2d\x2dcolor\x3dbg\x2b\x3a\x23363a4f\x2cbg\x3
 SETUVAR --export QT_IM_MODULE:fcitx
 SETUVAR --export SSH_AGENT_PID:1784
 SETUVAR --export SSH_AUTH_SOCK:/tmp/ssh\x2dXXXXXXxs4hzS/agent\x2e1777
+SETUVAR --export VISUAL:hx
 SETUVAR --export WORKSPACE_gamedev:\x1d
 SETUVAR --export WORKSPACE_work:email\x2dservice\x3a/home/spc/work/bace/email\x2dservice\x3brust\x2dbackend\x3a/home/spc/work/bace/rust\x2dbackend\x3bemail\x2dservice_pre_merge\x3a/home/spc/work/bace/bckp/email\x2dservice_pre_merge\x3bdata_streaming\x3a/home/spc/work/bace/data_streaming\x3bimages\x3a/home/spc/work/bace/images\x3bfluvio\x3a/home/spc/work/bace/fluvio\x3bfluvio_repro_absolute\x3a/home/spc/work/bace/fluvio_repro_absolute\x3bcharts\x3a/home/spc/work/bace/charts
 SETUVAR --export XMODIFIERS:\x40im\x3dfcitx
