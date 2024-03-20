@@ -13,7 +13,6 @@ if status is-interactive
     starship init fish | source
 
     source ~/.config/fish/aliases.fish
-    source ~/.config/fish/learn_cmds.fish
     zoxide init fish | source
 
 
