@@ -27,5 +27,5 @@ if status is-interactive
     fish_add_path ~/.local/bin
 
     # path
-    fish_add_path ~/projects/helix/target/release
+    # fish_add_path ~/projects/helix/target/release
 end

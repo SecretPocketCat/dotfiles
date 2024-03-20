@@ -5,6 +5,11 @@ local mux = wezterm.mux
 local config = wezterm.config_builder()
 config:set_strict_mode(true)
 
+-- temp wayland workaround
+config.enable_wayland = false
+-- config.dpi = 192/1.25
+-- config.freetype_load_flags = "DEFAULT"
+
 -- todo:
 -- unicode input
 -- rest of workspaces
@@ -313,10 +318,6 @@ config.inactive_pane_hsb = {
 
 -- -- -- INPUT -- -- --
 config.enable_kitty_keyboard = true
-config.use_ime = false
-config.use_dead_keys = false
--- config.allow_win32_input_mode = true
-
 
 -- -- -- EVENTS -- -- --
 
