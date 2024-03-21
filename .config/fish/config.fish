@@ -2,7 +2,9 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 
     # autostart zellij
-    eval (zellij setup --generate-auto-start fish | string collect)
+    if not set -q VSCODE_TERM
+        eval (zellij setup --generate-auto-start fish | string collect)
+    end
 
     set fish_greeting "::<TurboFish>"
 
