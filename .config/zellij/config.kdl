@@ -26,12 +26,12 @@ keybinds clear-defaults=true {
         bind "e" { NewPane "Down"; SwitchToMode "Normal"; }
         bind "i" { NewPane "Up"; SwitchToMode "Normal"; }
         bind "o" { NewPane "Right"; SwitchToMode "Normal"; }
-        bind "Backspace" { CloseFocus; SwitchToMode "Normal"; }
+        bind "c" { CloseFocus; SwitchToMode "Normal"; }
         bind "f" { ToggleFocusFullscreen; SwitchToMode "Normal"; }
         bind "z" { TogglePaneFrames; SwitchToMode "Normal"; }
         bind "w" { ToggleFloatingPanes; SwitchToMode "Normal"; }
         bind "e" { TogglePaneEmbedOrFloating; SwitchToMode "Normal"; }
-        bind "c" { SwitchToMode "RenamePane"; PaneNameInput 0;}
+        bind "r" { SwitchToMode "RenamePane"; PaneNameInput 0;}
     }
     move {
         bind "Tab" { MovePane; }
@@ -50,7 +50,7 @@ keybinds clear-defaults=true {
         bind "n" "Left" { GoToPreviousTab; }
         bind "o" "Right" { GoToNextTab; }
         bind "Space" { NewTab; SwitchToMode "Normal"; }
-        bind "Backspace" { CloseTab; SwitchToMode "Normal"; }
+        bind "c" { CloseTab; SwitchToMode "Normal"; }
         bind "b" { BreakPane; SwitchToMode "Normal"; }
         bind "h" { BreakPaneRight; SwitchToMode "Normal"; }
         bind "k" { BreakPaneLeft; SwitchToMode "Normal"; }
@@ -112,10 +112,10 @@ keybinds clear-defaults=true {
         bind "Alt l" { SwitchToMode "Locked"; }
         bind "Alt c" { Quit; }
         bind "Alt w" { NewPane; }
-        bind "Alt n" { MoveFocusOrTab "Left"; }
-        bind "Alt e" { MoveFocus "Down"; }
-        bind "Alt i" { MoveFocus "Up"; }
-        bind "Alt o" { MoveFocusOrTab "Right"; }
+        bind "Alt n" { GoToPreviousTab; }
+        bind "Alt e" { FocusPreviousPane; }
+        bind "Alt i" { FocusNextPane; }
+        bind "Alt o" { GoToNextTab; }
         bind "Alt u" { PreviousSwapLayout; }
         bind "Alt y" { NextSwapLayout; }
         bind "Alt k" { Resize "Increase"; }
