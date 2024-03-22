@@ -10,10 +10,10 @@ if status is-interactive
 
     # prompt
     starship init fish | source
-
-    source ~/.config/fish/aliases.fish
     zoxide init fish | source
 
+    # aliases - add only after sourcing other stuff
+    source ~/.config/fish/aliases.fish
 
     # SSH
     # todo: new sourced file + use an env var instead?
@@ -22,7 +22,7 @@ if status is-interactive
 
     # dev
     # edgedb
-    fish_add_path ~/.local/bin
+    # fish_add_path ~/.local/bin
 
     # path
     # fish_add_path ~/projects/helix/target/release
