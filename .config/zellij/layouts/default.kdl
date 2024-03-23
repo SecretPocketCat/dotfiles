@@ -1,0 +1,48 @@
+layout {
+	tab hide_floating_panes=true {
+		pane size=1 borderless=true {
+	        plugin location="zellij:tab-bar"
+	    }
+	 	pane split_direction="vertical" {
+			pane size="65%" focus=true {
+				command "hx"
+				args "."
+			}
+			pane stacked=true {
+				pane name="test" {
+					command "bacon"
+					args "test"
+				} 
+				pane name="clippy" {
+					command "bacon"
+					args "clippy"
+				} 
+			}
+		}
+		pane size=2 borderless=true {
+	        plugin location="zellij:status-bar"
+	    }
+		// todo: show only 1 floating pane at a time?
+		// or maybe just change this to add a bind to show each of these
+		// with ESC as a closing bind for the floating win?
+		// ToggleFloatingPanes
+		// Run
+		// 
+		floating_panes {
+			pane name="files" {
+				command "yazi"
+				x 3
+				y 2
+				width "90%"
+				height "85%"
+			}
+			pane name="git" {
+				command "lazygit"
+				x 6
+				y 3
+				width "90%"
+				height "85%"
+			}
+		}
+	}
+}
