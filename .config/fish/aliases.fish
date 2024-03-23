@@ -1,5 +1,5 @@
 alias cat bat
-alias cd zi
+alias cd z
 
 function t
     command task $argv
