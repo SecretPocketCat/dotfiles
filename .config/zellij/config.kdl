@@ -160,6 +160,8 @@ themes {
     bg "#585b70" // Surface2
     fg "#cdd6f4"
     red "#f38ba8"
+    // purple & green are swapped to use purple for accents
+    purple "#a6da95"
     green "#cba6f7"
     blue "#89b4fa"
     yellow "#f9e2af"
