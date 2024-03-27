@@ -1,5 +1,7 @@
 alias cat bat
 alias cd z
+alias ls exa
+alias lg lazygit
 
 function t
     command task $argv
