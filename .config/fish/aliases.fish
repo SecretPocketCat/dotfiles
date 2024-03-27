@@ -2,10 +2,7 @@ alias cat bat
 alias cd z
 alias ls exa
 alias lg lazygit
-
-function t
-    command task $argv
-end
+alias t task
 
 function ta
     command task add $argv
