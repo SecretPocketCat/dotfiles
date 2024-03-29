@@ -19,5 +19,6 @@ if [ -n "$current_ff_address" ]
     hyprctl dispatch focuswindow address:$current_ff_address
     firefox --new-tab $url &
 else
+    # todo: open with appropriate profile based on the workspace
     firefox --new-window $url &
 end
