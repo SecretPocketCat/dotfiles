@@ -15,3 +15,7 @@ function h
         command hx . $argv
     end
 end
+
+function code
+    command code --ozone-platform=wayland $argv
+end
