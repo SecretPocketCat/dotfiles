@@ -1,0 +1,7 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Name=open_url
+Type=Application
+Exec="\$HOME/scripts/open_url_on_current_workspace.fish %u"
+Terminal=false
