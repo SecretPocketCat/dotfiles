@@ -24,12 +24,10 @@ function screenshot -a cursor area
     # make sure the screenshot dir exists
     mkdir -p $dir
 
-    # turn of night-time filter
-    hyprshade off
+    # wait for rofi to fade out    
+    sleep 0.165
     # take the screenshot
     eval $cmd
-    # restore night-time filter
-    hyprshade auto
     # notify about the saved file
     notify-send -t 3000 "Saved screenshot to "$path
     exit 0
