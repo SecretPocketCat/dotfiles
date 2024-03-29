@@ -2,9 +2,9 @@ if status is-interactive
     # Commands to run in interactive sessions can go here
 
     # autostart zellij
-    if not set -q VSCODE_TERM
-        eval (zellij setup --generate-auto-start fish | string collect)
-    end
+    # if not set -q VSCODE_TERM
+    #     eval (zellij setup --generate-auto-start fish | string collect)
+    # end
 
     set fish_greeting "::<TurboFish>"
 
@@ -20,10 +20,13 @@ if status is-interactive
     keychain --eval --quiet ~/.ssh/id_ed25519 | source
 
 
+    # path
+    # scripts
+    fish_add_path ~/scripts
+    # hx
+    fish_add_path ~/projects/helix/target/release
     # dev
     # edgedb
-    # fish_add_path ~/.local/bin
+    fish_add_path ~/.local/bin
 
-    # path
-    # fish_add_path ~/projects/helix/target/release
 end
