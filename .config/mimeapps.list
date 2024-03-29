@@ -1,0 +1,21 @@
+[Added Associations]
+inode/directory=org.kde.dolphin.desktop;
+text/markdown=code.desktop;
+text/plain=code.desktop;
+x-scheme-handler/geo=wheelmap-geo-handler.desktop;
+x-scheme-handler/http=firefox.desktop;
+x-scheme-handler/https=firefox.desktop;
+x-scheme-handler/mailto=userapp-Thunderbird-OXEBJ2.desktop;
+x-scheme-handler/mid=userapp-Thunderbird-OXEBJ2.desktop;
+
+[Default Applications]
+inode/directory=org.kde.dolphin.desktop;
+message/rfc822=userapp-Thunderbird-OXEBJ2.desktop
+text/markdown=code.desktop;
+text/plain=code.desktop;
+x-scheme-handler/geo=wheelmap-geo-handler.desktop;
+x-scheme-handler/http=firefox.desktop;
+x-scheme-handler/https=firefox.desktop;
+x-scheme-handler/mailto=userapp-Thunderbird-OXEBJ2.desktop;
+x-scheme-handler/mid=userapp-Thunderbird-OXEBJ2.desktop
+x-scheme-handler/ferdium=ferdium.desktop
