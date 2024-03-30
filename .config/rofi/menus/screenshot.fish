@@ -1,5 +1,9 @@
 #!/usr/bin/fish
 
+function wait_for_rofi_fadeout
+    sleep 0.165
+end
+
 function screenshot -a cursor area
     set dir $HOME"/Pictures/screenshots/"
     set path $dir(date '+%Y-%m-%d_%H-%M-%S')".png"
@@ -25,7 +29,7 @@ function screenshot -a cursor area
     mkdir -p $dir
 
     # wait for rofi to fade out    
-    sleep 0.165
+    wait_for_rofi_fadeout
     # take the screenshot
     eval $cmd
     # notify about the saved file
@@ -33,7 +37,12 @@ function screenshot -a cursor area
     exit 0
 end
 
-if set selected (echo "󰩬 Area|󰩬 Area (no )|󰍹 Screen|󰍹 Screen (no )" | rofi -format 'd' -sep '|' -dmenu -i)
+function pick_color -a format
+    wait_for_rofi_fadeout
+    hyprpicker --no-fancy -f $format --autocopy
+end
+
+if set selected (echo "󰩬 Area|󰩬 Area (no )|󰍹 Screen|󰍹 Screen (no )|󰈊 Pick color [#hex]|󰈊 Pick color [R G B]|󰈊 Pick color rgb(R, G, B)" | rofi -format 'd' -sep '|' -dmenu -i)
     echo $selected
     switch "$selected"
         case 1
@@ -44,5 +53,11 @@ if set selected (echo "󰩬 Area|󰩬 Area (no )|󰍹 Screen|󰍹 Screen (no 
             screenshot
         case 4
             screenshot 1
+        case 5
+            pick_color hex
+        case 6
+            pick_color rgb
+        case 7
+            pick_color rgb | sd '(\w+)\s+(\w+)\s+(\w+)' 'rgb($1, $2, $3)' | wl-copy
     end
 end
