@@ -7,6 +7,7 @@ color-modes = true
 rulers = [80]
 bufferline = "multiple"
 jump-label-alphabet = "tsrneiaodhlpfuwymvkz"
+popup-border = "all"
 
 [editor.statusline]
 left = ["mode", "file-modification-indicator", "version-control", "spinner", "file-name"]
@@ -160,6 +161,7 @@ a = "goto_prev_parameter"
 c = "goto_prev_comment"
 T = "goto_prev_test"
 p = "goto_prev_paragraph"
+y = ":yank-diagnostic"
 
 [keys.normal.b]
 d = "goto_next_diag"
@@ -172,7 +174,7 @@ T = "goto_next_test"
 p = "goto_next_paragraph"
 
 [keys.insert]
-C-s = [":w", "normal_mode"]
+C-s = ["normal_mode", ":w"]
 C-v = "paste_clipboard_before"
 
 # disable defaults
