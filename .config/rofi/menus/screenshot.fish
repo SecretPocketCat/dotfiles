@@ -33,7 +33,7 @@ function screenshot -a cursor area
     exit 0
 end
 
-if set selected (echo "󰩬 Area|󰩬 Area (no )|󰍹 Screen|󰍹 Screen (no )" | rofi -format 'd' -sep '|' -dmenu -i -matching fuzzy)
+if set selected (echo "󰩬 Area|󰩬 Area (no )|󰍹 Screen|󰍹 Screen (no )" | rofi -format 'd' -sep '|' -dmenu -i)
     echo $selected
     switch "$selected"
         case 1

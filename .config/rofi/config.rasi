@@ -8,7 +8,7 @@ configuration {
 /*	yoffset: 0;*/
 /*	xoffset: 0;*/
 /*	fixed-num-lines: true;*/
-/*	show-icons: false;*/
+	show-icons: true;
 terminal: "wezterm";
 /*	ssh-client: "ssh";*/
 /*	ssh-command: "{terminal} -e {ssh-client} {host} [-p {port}]";*/
@@ -37,7 +37,7 @@ terminal: "wezterm";
 /*	parse-hosts: false;*/
 /*	parse-known-hosts: true;*/
 /*	combi-modes: "window,run";*/
-/*	matching: "normal";*/
+	matching: "fuzzy";
 /*	tokenize: true;*/
 /*	m: "-5";*/
 /*	filter: ;*/
@@ -61,10 +61,10 @@ terminal: "wezterm";
 /*	xserver-i300-workaround: false;*/
 /*	completer-mode: "recursivebrowser";*/
 /*	pid: "/run/user/1000/rofi.pid";*/
-/*	display-window: ;*/
-/*	display-run: ;*/
+	display-window: " ";
+	display-run: " ";
 /*	display-ssh: ;*/
-/*	display-drun: ;*/
+	display-drun: " ";
 /*	display-combi: ;*/
 /*	display-keys: ;*/
 /*	display-filebrowser: ;*/
