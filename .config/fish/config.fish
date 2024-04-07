@@ -9,7 +9,6 @@ if status is-interactive
     set fish_greeting "::<TurboFish>"
 
     # prompt
-    starship init fish | source
     zoxide init fish | source
 
     # aliases - add only after sourcing other stuff
