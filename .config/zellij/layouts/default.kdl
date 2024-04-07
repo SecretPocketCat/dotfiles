@@ -9,16 +9,38 @@ layout {
 				args "."
 			}
 			pane stacked=true {
-				pane name="test" {
-					command "bacon"
-					args "test"
+				pane name="misc"
+				// todo: task filtering should be based on an env var based a workspace specific env var
+				pane name="task" {
+					command "task" 
 				} 
-				pane name="clippy" {
-					command "bacon"
-					args "clippy"
+				// pane name="test" {
+				// 	command "bacon"
+				// 	args "test"
+				// } 
+				// pane name="clippy" {
+				// 	command "bacon"
+				// 	args "clippy"
+				// } 
+
+				// pane name="echo key" {
+				// 	plugin location="file:/home/spc/projects/zellij/echo_key_plugin/target/wasm32-wasi/release/echo_key_plugin.wasm" 
+				// }
+				
+				pane name="cheatsheet" {
+					command "glow" 
+					// args "~/.config/helix/cheatsheet.md"
+					args "/home/spc/dotfiles/.config/helix/cheatsheet.md"
+				} 
+				pane name="log" {
+					command "tail" 
+					args "/tmp/zellij-1000/zellij-log/zellij.log" "-F"
 				} 
 			}
 		}
+		pane size=1 borderless=true {
+	        plugin location="zellij:tab-bar"
+	    }
 		pane size=2 borderless=true {
 	        plugin location="zellij:status-bar"
 	    }
@@ -27,22 +49,40 @@ layout {
 		// with ESC as a closing bind for the floating win?
 		// ToggleFloatingPanes
 		// Run
-		// 
+		// todo: templates
 		floating_panes {
-			pane name="files" {
-				command "yazi"
-				x 3
-				y 2
-				width "90%"
-				height "85%"
-			}
-			pane name="git" {
-				command "lazygit"
-				x 6
-				y 3
-				width "90%"
-				height "85%"
-			}
+			 pane name="files" {
+			 	command "yazi"
+			 	x 0
+			 	y 1
+			 	width "100%"
+			 	height "90%"
+			 }
+			 pane name="git" {
+			 	command "lazygit"
+			 	x 0
+			 	y 1
+			 	width "100%"
+			 	height "90%"
+			 }
+			 pane name="wavedash" {
+			 	plugin location="wavedash"
+			 	x 0
+			 	y 1
+			 	width "100%"
+			 	height "90%"
+			 }
 		}
 	}
 }
+
+keybinds {
+    shared {
+        bind "Alt t" {
+	        LaunchOrFocusPlugin "wavedash" {
+	        	floating true
+	    	}
+        }
+    }
+}
+

@@ -120,7 +120,8 @@ keybinds clear-defaults=true {
         bind "Alt y" { NextSwapLayout; }
         bind "Alt k" { Resize "Increase"; }
         bind "Alt h" { Resize "Decrease"; }
-        bind "Alt d" { EditScrollback; SwitchToMode "Normal"; }
+        // todo: bind
+        // bind "Alt d" { EditScrollback; SwitchToMode "Normal"; }
     }
     shared_except "normal" "locked" {
         bind "Enter" "Esc" { SwitchToMode "Normal"; }
@@ -146,11 +147,12 @@ keybinds clear-defaults=true {
 }
 
 plugins {
-    tab-bar { path "tab-bar"; }
-    status-bar { path "status-bar"; }
-    strider { path "strider"; }
-    compact-bar { path "compact-bar"; }
-    session-manager { path "session-manager"; }
+    tab-bar location="zellij:tab-bar"
+    status-bar location="zellij:status-bar"
+    strider location="zellij:strider"
+    compact-bar location="zellij:compact-bar"
+    session-manager location="zellij:session-manager"
+    wavedash location="file:/home/spc/projects/zellij/wavedash/target/wasm32-wasi/release/wavedash.wasm"
 }
 
 theme "catppuccin-mocha-accent"
@@ -176,6 +178,7 @@ themes {
 ui {
     pane_frames {
         rounded_corners true
+        hide_session_name true
     }
 }
 
