@@ -1,0 +1,29 @@
+[manager]
+prepend_keymap = [
+  { on = [ "i" ], run = "arrow -1", desc = "Move cursor up" },
+	{ on = [ "e" ], run = "arrow 1",  desc = "Move cursor down" },
+	{ on = [ "I" ], run = "arrow -5", desc = "Move cursor up 5 lines" },
+	{ on = [ "E" ], run = "arrow 5",  desc = "Move cursor down 5 lines" },
+	{ on = [ "n" ], run = "leave", desc = "Go back to the parent directory" },
+	{ on = [ "o" ], run = "enter", desc = "Enter the child directory" },
+	{ on = [ "N" ], run = "back",  desc = "Go back to the previous directory" },
+	{ on = [ "O" ], run = "forward", desc = "Go forward to the next directory" },
+  { on = [ "<C-r>" ],  run = "rename --cursor=before_ext", desc = "Rename a file or directory" },
+	{ on = [ "s" ], run = "find_arrow", desc = "Go to next found file" },
+	{ on = [ "S" ], run = "find_arrow --previous", desc = "Go to previous found file" },
+	{ on = [ "h" ], run = "open", desc = "Open the selected files" },
+	{ on = [ "H" ], run = "open --interactive", desc = "Open the selected files interactively" },
+	{ on = [ "t" ], run = "jump zoxide", desc = "Jump to a directory using zoxide" },
+	{ on = [ "F" ], run = "search fd", desc = "Search files by name using fd" },
+	{ on = [ "<C-f>" ], run = "search rg", desc = "Search files by content using ripgrep" },
+  { on = [ "<C-i>" ], run = "select_all --state=none", desc = "Inverse selection of all files" },
+  { on = [ "<C-t>" ], run = "tab_create --current", desc = "Create a new tab using the current path" },
+]
+
+[input]
+prepend_keymap = [
+	{ on = [ "a" ], run = "insert", desc = "Enter insert mode" },
+	{ on = [ "A" ], run = [ "move -999", "insert" ], desc = "Move to the BOL, and enter insert mode" },
+	{ on = [ "r" ], run = "insert --append", desc = "Enter append mode" },
+  { on = [ "R" ], run = [ "move 999", "insert --append" ], desc = "Move to the EOL, and enter append mode" },
+]
