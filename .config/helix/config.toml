@@ -31,7 +31,7 @@ enable = true
 
 [keys.normal]
 # general CTRL shortcuts
-C-s = ":w"
+C-s = [":w", "save_selection"]
 C-a = "select_all"
 C-r = "rename_symbol"
 C-k = ":config-reload"
@@ -50,9 +50,9 @@ O = "extend_next_word_end"
 
 # move or extend up/down
 i = "move_visual_line_up"
-I = "extend_line_above"
+I = "select_line_above"
 e = "move_visual_line_down"
-E = "extend_line_below"
+E = "select_line_below"
 
 # scroll
 pageup = "half_page_up"
@@ -76,7 +76,6 @@ S-ret = "open_above"
 # dupe line
 C-ret = ["extend_to_line_bounds", "yank", "paste_after"]
 
-# todo fix: delete binding (also applies to INSERT mode) - might be related to the extended kitty protocol thingy
 # backspace/delete
 backspace = "delete_selection_noyank"
 S-backspace = ["yank_to_clipboard", "delete_selection_noyank"]
@@ -88,7 +87,6 @@ C-del = ["extend_to_line_bounds", "delete_selection_noyank", "insert_mode"]
 # Search
 s = "search_next"
 S = "search_prev"
-S-t = "search_selection"
 t = "goto_word"
 T = "extend_to_word"
 v = "select_regex"
@@ -96,7 +94,8 @@ V = "split_selection_on_newline"
 C-h = ["select_all", "select_regex"]
 f = "find_next_char"
 F = "find_prev_char"
-C-f = "repeat_last_motion"
+C-f = "search_selection"
+"?" = "global_search"
 
 # Comments
 h = "toggle_comments"
@@ -125,12 +124,15 @@ S-tab = "unindent"
 # Undo/redo
 C-z = "undo"
 C-y = "redo"
+z = "goto_last_modification"
+Z = "goto_last_modified_file"
+
+# Copy/Paste 
 C-c = "yank_to_clipboard"
 C-v = "replace_selections_with_clipboard"
 # todo: bind this to smt
 p = "paste_clipboard_after"
 P = "paste_clipboard_before"
-C-x = ["yank_to_clipboard", "delete_selection"]
 
 # disable defaults
 
@@ -148,6 +150,8 @@ e = "expand_selection"
 s = "shrink_selection"
 n = "select_prev_sibling" 
 o = "select_next_sibling" 
+l = "copy_selection_on_next_line"
+L = "copy_selection_on_prev_line"
 
 # [keys.normal.todo]
 # f = "format_selection"
@@ -161,7 +165,6 @@ a = "goto_prev_parameter"
 c = "goto_prev_comment"
 T = "goto_prev_test"
 p = "goto_prev_paragraph"
-y = ":yank-diagnostic"
 
 [keys.normal.b]
 d = "goto_next_diag"
@@ -173,8 +176,14 @@ c = "goto_next_comment"
 T = "goto_next_test"
 p = "goto_next_paragraph"
 
+[keys.normal.y]
+y = ":yank-diagnostic"
+# todo: other yank stuff
+# yank filepath (whichever register that is)
+
 [keys.insert]
-C-s = ["normal_mode", ":w"]
+C-s = ["normal_mode", ":w", "save_selection"]
+esc = ["normal_mode", "save_selection"]
 C-v = "paste_clipboard_before"
 
 # disable defaults
