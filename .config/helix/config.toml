@@ -182,8 +182,8 @@ y = ":yank-diagnostic"
 # yank filepath (whichever register that is)
 
 [keys.insert]
-C-s = ["normal_mode", ":w", "save_selection"]
-esc = ["normal_mode", "save_selection"]
+C-s = ["normal_mode", "commit_undo_checkpoint", ":w", "save_selection"]
+esc = ["normal_mode", "commit_undo_checkpoint", "save_selection"]
 C-v = "paste_clipboard_before"
 
 # disable defaults
