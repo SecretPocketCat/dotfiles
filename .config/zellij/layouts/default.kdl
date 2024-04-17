@@ -1,23 +1,13 @@
 layout {
 	tab hide_floating_panes=true {
-		pane size=1 borderless=true {
-	        plugin location="zellij:tab-bar"
-	    }
 	 	pane split_direction="vertical" {
-			pane size="65%" focus=true {
+			pane size="65%" focus=true name="editor" {
 				command "hx"
 				args "."
 			}
 			pane stacked=true {
 				pane name="misc"
 				// todo: task filtering should be based on an env var based a workspace specific env var
-				pane name="task" {
-					command "task" 
-				} 
-				// pane name="test" {
-				// 	command "bacon"
-				// 	args "test"
-				// } 
 				// pane name="clippy" {
 				// 	command "bacon"
 				// 	args "clippy"
@@ -36,41 +26,25 @@ layout {
 					command "tail" 
 					args "/tmp/zellij-1000/zellij-log/zellij.log" "-F"
 				} 
+				pane name="test" {
+				 	command "bacon"
+				 	args "test"
+				} 
 			}
 		}
-		pane size=1 borderless=true {
-	        plugin location="zellij:tab-bar"
-	    }
 		pane size=2 borderless=true {
-	        plugin location="zellij:status-bar"
+	        plugin location="status-bar"
 	    }
-		// todo: show only 1 floating pane at a time?
-		// or maybe just change this to add a bind to show each of these
-		// with ESC as a closing bind for the floating win?
-		// ToggleFloatingPanes
-		// Run
-		// todo: templates
+		pane size=1 borderless=true {
+	        plugin location="tab-bar"
+	    }
 		floating_panes {
-			 pane name="files" {
-			 	command "yazi"
-			 	x 0
-			 	y 1
-			 	width "100%"
-			 	height "90%"
-			 }
-			 pane name="git" {
-			 	command "lazygit"
-			 	x 0
-			 	y 1
-			 	width "100%"
-			 	height "90%"
-			 }
 			 pane name="wavedash" {
 			 	plugin location="wavedash"
 			 	x 0
 			 	y 1
 			 	width "100%"
-			 	height "90%"
+			 	height "100%"
 			 }
 		}
 	}
@@ -78,10 +52,50 @@ layout {
 
 keybinds {
     shared {
+      //   bind "Alt t" {
+	     //    LaunchOrFocusPlugin "wavedash" {
+	     //    	floating true
+	    	// }
+      //   }
         bind "Alt t" {
-	        LaunchOrFocusPlugin "wavedash" {
-	        	floating true
+	        MessagePlugin "wavedash" {
+	        	name "Wavedash"
+	        }
+        }
+        bind "Alt f" {
+	        MessagePlugin "wavedash" {
+	        	name "FilePicker"
+	        }
+        }
+        bind "Alt e" {
+	        MessagePlugin "wavedash" {
+	        	name "FocusEditorPane"
+        	}
+        }
+        bind "Alt b" {
+	        MessagePlugin "wavedash" {
+	        	name "HxBufferJumplist"
 	    	}
+        }
+        bind "Alt g" {
+	        MessagePlugin "wavedash" {
+	        	name "Git"
+    	 	}
+        }
+        bind "Alt i" {
+	        MessagePlugin "wavedash" {
+	        	name "Terminal"
+    	 	}
+        }
+        bind "Alt n" {
+	        MessagePlugin "wavedash" {
+	        	name "NewTerminal"
+    	 	}
+        }
+        bind "Alt k" {
+	        MessagePlugin "wavedash" {
+	        	name "K9s"
+    	 	}
         }
     }
 }
