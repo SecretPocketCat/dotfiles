@@ -3,6 +3,8 @@ alias cd z
 alias ls exa
 alias lg lazygit
 alias t task
+alias zel zellij
+alias c wl-copy
 
 function ta
     command task add $argv
