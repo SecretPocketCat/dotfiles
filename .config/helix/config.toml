@@ -134,6 +134,9 @@ C-v = "replace_selections_with_clipboard"
 p = "paste_clipboard_after"
 P = "paste_clipboard_before"
 
+# Buffers
+C-b = "buffer_picker"
+
 # disable defaults
 
 # Case submenu
