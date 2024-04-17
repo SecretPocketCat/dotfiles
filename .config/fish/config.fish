@@ -19,6 +19,8 @@ if status is-interactive
     keychain --eval --quiet ~/.ssh/id_ed25519 | source
 
 
+    direnv hook fish | source
+
     # path
     # scripts
     fish_add_path ~/scripts
