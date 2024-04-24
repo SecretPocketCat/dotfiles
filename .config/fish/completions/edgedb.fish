@@ -1554,7 +1554,7 @@ complete -c edgedb -n "__fish_seen_subcommand_from ui" -l admin -d 'Connect to a
 complete -c edgedb -n "__fish_seen_subcommand_from ui" -l print-url -d 'Print URL in console instead of opening in the browser'
 complete -c edgedb -n "__fish_seen_subcommand_from ui" -l no-server-check -d 'Do not probe the UI endpoint of the server instance'
 complete -c edgedb -n "__fish_seen_subcommand_from ui" -s h -l help -d 'Print help'
-complete -c edgedb -n "__fish_seen_subcommand_from info" -l get -d 'Get specific value:' -r -f -a "{config-dir	'',cache-dir	'',data-dir	'',service-dir	''}"
+complete -c edgedb -n "__fish_seen_subcommand_from info" -l get -d 'Get specific value:' -r -f -a "{install-dir	'',config-dir	'',cache-dir	'',data-dir	'',service-dir	''}"
 complete -c edgedb -n "__fish_seen_subcommand_from info" -s h -l help -d 'Print help (see more with \'--help\')'
 complete -c edgedb -n "__fish_seen_subcommand_from project; and not __fish_seen_subcommand_from init; and not __fish_seen_subcommand_from unlink; and not __fish_seen_subcommand_from info; and not __fish_seen_subcommand_from upgrade; and not __fish_seen_subcommand_from help" -s h -l help -d 'Print help'
 complete -c edgedb -n "__fish_seen_subcommand_from project; and not __fish_seen_subcommand_from init; and not __fish_seen_subcommand_from unlink; and not __fish_seen_subcommand_from info; and not __fish_seen_subcommand_from upgrade; and not __fish_seen_subcommand_from help" -f -a "init" -d 'Initialize project or link to existing unlinked project'

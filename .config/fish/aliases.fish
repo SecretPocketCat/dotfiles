@@ -2,9 +2,9 @@ alias cat bat
 alias cd z
 alias ls exa
 alias lg lazygit
-alias t task
-alias zel zellij
+alias zl zellij
 alias c wl-copy
+alias t task
 
 function ta
     command task add $argv
