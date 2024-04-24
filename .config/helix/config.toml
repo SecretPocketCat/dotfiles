@@ -32,6 +32,7 @@ enable = true
 [keys.normal]
 # general CTRL shortcuts
 C-s = [":w", "save_selection"]
+C-S = ":wa"
 C-a = "select_all"
 C-r = "rename_symbol"
 C-k = ":config-reload"
@@ -136,6 +137,8 @@ P = "paste_clipboard_before"
 
 # Buffers
 C-b = "buffer_picker"
+q = ":bc" # close buffer
+Q = ":bco" #close all other buffers
 
 # disable defaults
 
