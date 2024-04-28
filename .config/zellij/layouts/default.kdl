@@ -1,65 +1,42 @@
 layout {
-	tab hide_floating_panes=true {
-	 	pane split_direction="vertical" {
-			pane size="65%" focus=true name="editor" {
-				command "hx"
-				args "."
-			}
-			pane stacked=true {
-				pane name="misc"
-				// todo: task filtering should be based on an env var based a workspace specific env var
-				// pane name="clippy" {
-				// 	command "bacon"
-				// 	args "clippy"
-				// } 
-
-				// pane name="echo key" {
-				// 	plugin location="file:/home/spc/projects/zellij/echo_key_plugin/target/wasm32-wasi/release/echo_key_plugin.wasm" 
-				// }
-				
-				pane name="cheatsheet" {
-					command "glow" 
-					// args "~/.config/helix/cheatsheet.md"
-					args "/home/spc/dotfiles/.config/helix/cheatsheet.md"
-				} 
-				pane name="log" {
-					command "tail" 
-					args "/tmp/zellij-1000/zellij-log/zellij.log" "-F"
-				} 
-				pane name="test" {
-				 	command "bacon"
-				 	args "test"
-				} 
-			}
-		}
-		pane size=2 borderless=true {
-	        plugin location="status-bar"
-	    }
-		pane size=1 borderless=true {
-	        plugin location="tab-bar"
-	    }
-		floating_panes {
-			 pane name="wavedash" {
-			 	plugin location="wavedash"
-			 	x 0
-			 	y 1
-			 	width "100%"
-			 	height "100%"
-			 }
-		}
+ 	pane name="wavedash - pick project" {
+	 	plugin location="project_picker" {
+	 	    root.work "/home/spc/work/bace"
+	 	    task_proj.work "bace"
+	 	    
+	 	    root.hobby "/home/spc/projects"
+	 	    default.hobby true
+	 	    extra.hobby.dot "/home/spc/dotfiles"
+	 	    task_proj.hobby "l"
+	 	    task_proj.hobby.zellij "l.zellij"
+	 	    task_proj.hobby.helix "l.hx"
+	 	    
+	 	    root.gamedev "/home/spc/gamedev"
+	 	    task_proj.gamedev "gd"
+	 	}
 	}
 }
 
 keybinds {
     shared {
-      //   bind "Alt t" {
-	     //    LaunchOrFocusPlugin "wavedash" {
-	     //    	floating true
-	    	// }
-      //   }
+        bind "Alt a" {
+	        MessagePlugin "wavedash" {
+	        	name "OpenProject"
+	        }
+        }
         bind "Alt t" {
 	        MessagePlugin "wavedash" {
-	        	name "Wavedash"
+	        	name "DashProject"
+	        }
+        }
+        bind "Alt s" {
+	        MessagePlugin "wavedash" {
+	        	name "DashStatus"
+	        }
+        }
+        bind "Alt r" {
+	        MessagePlugin "wavedash" {
+	        	name "DashTerminal"
 	        }
         }
         bind "Alt f" {
@@ -77,17 +54,22 @@ keybinds {
 	        	name "HxBufferJumplist"
 	    	}
         }
+        bind "Alt o" {
+	        MessagePlugin "wavedash" {
+	        	name "HxOpenFile"
+	    	}
+        }
         bind "Alt g" {
 	        MessagePlugin "wavedash" {
 	        	name "Git"
     	 	}
         }
-        bind "Alt i" {
+        bind "Alt n" {
 	        MessagePlugin "wavedash" {
 	        	name "Terminal"
     	 	}
         }
-        bind "Alt n" {
+        bind "Alt i" {
 	        MessagePlugin "wavedash" {
 	        	name "NewTerminal"
     	 	}
@@ -99,4 +81,3 @@ keybinds {
         }
     }
 }
-
