@@ -183,7 +183,7 @@ T = "goto_next_test"
 p = "goto_next_paragraph"
 
 [keys.normal.y]
-y = ":yank-diagnostic"
+d = ":yank-diagnostic"
 # todo: other yank stuff
 # yank filepath (whichever register that is)
 
