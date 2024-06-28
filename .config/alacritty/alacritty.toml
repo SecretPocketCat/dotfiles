@@ -1,1 +1,20 @@
 import = ["~/.config/alacritty/catppuccin-mocha.toml"]
+
+[hints]
+alphabet = "tnseriaoplfuwydhvm"
+
+[[hints.enabled]]
+command = "xdg-open" # On Linux/BSD
+# command = "open" # On macOS
+# command = { program = "cmd", args = [ "/c", "start", "" ] } # On Windows
+# hyperlinks = true
+# post_processing = true
+# persist = false
+# mouse.enabled = true
+binding = { key = "U", mods = "Control" }
+# regex = "[\\w/]+\\.rs:\\d+:\\d+"
+regex = "(ipfs:|ipns:|magnet:|mailto:|gemini://|gopher://|https://|http://|news:|file:|git://|ssh:|ftp://)[^\u0000-\u001F\u007F-\u009F<>\"\\s{-}\\^⟨⟩`]+|[\\w/]+\\.rs:\\d+:\\d+"
+
+
+# https://alacritty.org/config-alacritty.html
+#  --> src/lib.rs:8:4 else
