@@ -1,0 +1,4 @@
+[[language]]
+name = "lua"
+formatter = { command = "stylua", args = ["-"] } # - to read from stdin
+auto-format = true
