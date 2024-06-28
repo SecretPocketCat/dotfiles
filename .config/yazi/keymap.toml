@@ -23,6 +23,7 @@ prepend_keymap = [
 	{ on = [ "<Enter>" ], run = "plugin --sync smart-enter", desc = "Open the selected file or enter the directory" },
 	{ on = [ "<S-Enter>" ], run = "open", desc = "Open the selected files" },
 	{ on = [ "<C-Enter>" ], run = "open --interactive", desc = "Open the selected files interactively" },
+	{ on = [ "y" ], run = [ "yank", '''shell --confirm 'for path in "$@"; do echo "file://$path"; done | wl-copy -t text/uri-list'''' ]}
 ]
 
 [input]
