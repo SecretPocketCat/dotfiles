@@ -29,5 +29,4 @@ if status is-interactive
     # dev
     # edgedb
     fish_add_path ~/.local/bin
-
 end
