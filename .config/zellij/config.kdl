@@ -39,7 +39,7 @@ keybinds clear-defaults=true {
     //     bind "o" { SearchToggleOption "WholeWord"; }
     // }
     entersearch {
-        bind "Alt c" "Esc" { SwitchToMode "Scroll"; }
+        bind "Esc" { SwitchToMode "Scroll"; }
         bind "Enter" { SwitchToMode "Search"; }
     }
     renametab {
@@ -59,9 +59,11 @@ keybinds clear-defaults=true {
     //         SwitchToMode "Normal"
     //     }
     // }
+    shared {
+        bind "Alt c" { Quit; }
+    }
     shared_except "locked" {
         // bind "Alt l" { SwitchToMode "Locked"; }
-        bind "Alt c" { Quit; }
         // bind "Alt w" { NewPane; }
         // bind "Alt n" { GoToPreviousTab; }
         // bind "Alt e" { FocusPreviousPane; }
@@ -293,3 +295,7 @@ disable_session_metadata false
 //
 // styled_underlines false
 
+// Enable or disable support for the enhanced Kitty Keyboard Protocol (the host terminal must also support it)
+// Default: true (if the host terminal supports it)
+//
+// support_kitty_keyboard_protocol false
