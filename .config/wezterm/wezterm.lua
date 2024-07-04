@@ -19,7 +19,7 @@ utils.mergeTable(config, require("keymap"))
 -- EVENTS --
 wezterm.on("gui-startup", function(cmd)
 	local _, pane, window = mux.spawn_window({})
-	-- todo:
+	-- todo: only when an arg is provided?
 	-- repo_select(window:gui_window(), pane, true, true)
 end)
 

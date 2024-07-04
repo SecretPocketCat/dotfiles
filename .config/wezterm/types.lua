@@ -2,7 +2,7 @@
 
 ---@alias NestedTaskProjects { [string]: string }
 
----@class Project
+---@class ProjectWorkspace
 ---@field root string Root path
 ---@field root_task_project string Task pane project filter
 ---@field nested_task_projects NestedTaskProjects Task pane filter for nested projects
@@ -13,5 +13,5 @@
 ---@field task_project string? Task pane project filter
 
 ---@class ProjectOption
----@field path string
+---@field id string Project path relative to home
 ---@field label string

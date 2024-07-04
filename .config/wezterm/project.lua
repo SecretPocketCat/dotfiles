@@ -1,8 +1,8 @@
-local utils = require("utils")
-local process = require("process")
-local debug = require("debug")
+---@type WezTerm
 local wezterm = require("wezterm")
+local mux = wezterm.mux
 local act = wezterm.action
+local utils = require("utils")
 
 local module = {
 	cancel_id = "cancel",
@@ -13,16 +13,16 @@ local module = {
 ---@param nested_task_projects NestedTaskProjects?
 ---@param ... ExtraProject
 local function workspace(root, root_task_project, nested_task_projects, ...)
-	---@type Project
+	---@type ProjectWorkspace
 	return {
 		root = root,
 		root_task_project = root_task_project,
 		nested_task_projects = nested_task_projects or {},
-		extra_projects = ...,
+		extra_projects = { ... },
 	}
 end
 
----@type Project
+---@type ProjectWorkspace
 module.default_project = workspace("/projects", "l", {
 	zellij = "l.zellij",
 	helix = "l.hx",
@@ -35,7 +35,7 @@ module.default_project = workspace("/projects", "l", {
 	root = "/projects/keebs/qmk/keyboards/klor/keymaps/secretpocketcat/",
 })
 
----@type Project[]
+---@type ProjectWorkspace[]
 module.workspaces = {
 	module.default_project,
 	workspace("/work", "work", {
@@ -46,41 +46,47 @@ module.workspaces = {
 
 ---@type ProjectOption
 module.cancel_option = {
-	path = "__cancel__",
+	id = "__cancel__",
 	label = "󰘌 Cancel",
 }
 
----@param workspace_root string
-function module.get_repo_select_options(workspace_root)
-	local cache_key = "ws_" .. workspace_root
+---@param project_ws ProjectWorkspace
+function module.get_repo_select_options(project_ws)
+	local cache_key = "ws_" .. project_ws.root
 	---@type ProjectOption[] | nil
 	local options = wezterm.GLOBAL[cache_key]
 
 	if not options then
 		-- https://stackoverflow.com/a/78010951
 		local repo_paths = wezterm.split_by_newlines(
-			process.execute_command("find " .. workspace_root .. " -type d -exec test -d '{}/.git' \\; -prune -print")
+			utils.execute_command(
+				"find " .. wezterm.home_dir .. project_ws.root .. " -type d -exec test -d '{}/.git' \\; -prune -print"
+			)
 		)
 
 		---@type ProjectOption[]
 		local repos = {}
+
 		for _, path in ipairs(repo_paths) do
 			-- parts of the regex are repeated, because {1,2} does not seem to work in lua
-			local name = path:match("[/\\][^/\\]+[/\\][^/\\]+$")
+			local name = path:match("[/\\][^/\\]+[/\\][^/\\]+$"):gsub(project_ws.root, "")
 			---@type ProjectOption
 			local option = {
 				label = name,
-				path = path,
+				id = path,
 			}
 			table.insert(repos, option)
 		end
 
-		-- local extra = extra_repos[workspace];
-		-- if extra then
-		--   for _, option in pairs(extra) do
-		--     table.insert(repos, option)
-		--   end
-		-- end
+		for _, p in pairs(project_ws.extra_projects) do
+			---@type ProjectOption
+			local option = {
+				label = p.root:gsub(project_ws.root, ""),
+				id = wezterm.home_dir .. p.root,
+			}
+
+			table.insert(repos, option)
+		end
 
 		table.insert(repos, module.cancel_option)
 
@@ -92,10 +98,9 @@ function module.get_repo_select_options(workspace_root)
 end
 
 function module.repo_select(window, pane, replace_tab, strict_cancel)
-	local ws_root = module.pane_project_root(pane)
-	local project_options = module.get_repo_select_options(ws_root)
-	-- local title = "todo: last bits of path" .. ' repo';
-	local title = " project: " .. ws_root
+	local project_ws = module.pane_project(pane)
+	local project_options = module.get_repo_select_options(project_ws)
+	local title = "  " .. project_ws.root
 	if replace_tab then
 		title = title .. " REPLACE"
 	end
@@ -104,13 +109,13 @@ function module.repo_select(window, pane, replace_tab, strict_cancel)
 		title = title .. " (STRICT CANCEL)"
 	end
 
-	window:set_right_status(ws_root)
+	window:set_right_status(project_ws.root)
 
 	window:perform_action(
 		act.InputSelector({
 			action = wezterm.action_callback(function(_, _, path, name)
-				if path and name and path ~= module.cancel_option.path then
-					module.open_repo_layout_tab(window, path, name, replace_tab)
+				if path and name and path ~= module.cancel_option.id then
+					module.open_project_workspace(window, path)
 				elseif strict_cancel and not name and not path then
 					module.repo_select(window, pane, replace_tab, strict_cancel)
 				else
@@ -126,84 +131,83 @@ function module.repo_select(window, pane, replace_tab, strict_cancel)
 	)
 end
 
--- pub fn fzf_pane_cmd<'a>(
---     options: impl Iterator<Item = &'a str>,
---     message_type: impl Into<&'a str>,
---     message_client_id: Uuid,
---     use_index: bool,
--- ) -> CommandToRun {
---     let opts = options.into_iter().join("\n");
-
---     let fzf_layout_args = "--layout reverse";
---     let fzf_cmd = if use_index {
---         format!("command cat -n | fzf {fzf_layout_args} --with-nth 2.. | awk '{{print $1}}'")
---     } else {
---         format!("fzf {fzf_layout_args} ")
---     };
-
---     let cmd = format!(
---         "printf '{opts}' | {fzf_cmd} | zellij pipe  --name {} --args '{MSG_CLIENT_ID_ARG}={message_client_id}'",
---         message_type.into());
---     CommandToRun {
---         path: "bash".into(),
---         args: vec!["-c".to_string(), cmd],
---         cwd: None,
---     }
--- }
-
-local function open_repo_layout_tab(window, path, name, replace_tab)
-	local tab_to_close = window:active_tab()
-	local mwin = window:mux_window()
-	local editor_pane
-
-	for _, tab in pairs(mwin:tabs()) do
-		if tab:get_title() == name then
-			editor_pane = tab:active_pane()
-			if tab_to_close:get_title() == name then
-				tab_to_close = nil
-			end
-		end
+--- Open project workspace
+---@param window _.wezterm.Window
+---@param path string
+function module.open_project_workspace(window, path)
+	if window:active_workspace() == path then
+		-- workspace already openede & focused - bail
+		return
 	end
 
-	if not editor_pane then
-		local tab, build_pane, _ = mwin:spawn_tab({
+	if not utils.contains(mux.get_workspace_names(), path) then
+		local tab, editor_pane, win = mux.spawn_window({
+			workspace = path,
 			cwd = path,
+			args = { "hx", "." },
 		})
-		tab:set_title(name)
-		editor_pane = build_pane:split({
-			direction = "Top",
-			size = 0.75,
-			cwd = path,
-		})
-		editor_pane:send_text("hx . \n")
-		build_pane:split({
+		tab:set_title("hx")
+
+		-- status
+		-- todo: actually base the cmd of this pane on the project type
+		-- & possibly just skip it if it doesn't need one
+		--  =>
+		-- bacon for rust (cargo.toml)
+		-- glow for md (possible split might be different than regular code)
+		-- ??? for web (package.json)
+		local status_pane = editor_pane:split({
 			direction = "Right",
-			size = 0.4,
+			size = 0.325,
 			cwd = path,
 		})
+		status_pane:send_text("bacon clippy --summary \n")
+
+		-- additional tabs
+		local yazi_tab, yazi_pane = win:spawn_tab({
+			cwd = path,
+		})
+		yazi_tab:set_title("yazi")
+		yazi_pane:send_text("yazi . \n")
+
+		local git_tab = win:spawn_tab({
+			cwd = path,
+			args = { "lazygit" },
+		})
+		git_tab:set_title("git")
+
+		-- todo: use project filter from conf
+		local task_tab, task_pane = win:spawn_tab({
+			cwd = path,
+		})
+		task_tab:set_title("tasks")
+		task_pane:send_text("task \n")
+
+		local cheatsheet_tab, cheatsheet_pane = win:spawn_tab({
+			cwd = path,
+		})
+		cheatsheet_tab:set_title("cheatsheet")
+		cheatsheet_pane:send_text("glow ~/.config/helix/cheatsheet.md \n")
+
+		-- focus editor pane
+		editor_pane:activate()
 	end
 
-	if replace_tab and tab_to_close then
-		tab_to_close:activate()
-		window:perform_action(act.CloseCurrentTab({ confirm = false }), tab_to_close:active_pane())
-	end
-
-	editor_pane:activate()
+	mux.set_active_workspace(path)
 end
 
----@return string
-function module.pane_project_root(pane)
+---@return ProjectWorkspace
+function module.pane_project(pane)
 	---@type string
 	local cwd = pane:get_current_working_dir().file_path
 	if cwd and cwd ~= wezterm.home_dir then
 		for _, ws in ipairs(module.workspaces) do
 			if cwd:match(ws.root) then
-				return wezterm.home_dir .. ws.root
+				return ws
 			end
 		end
 	end
 
-	return wezterm.home_dir .. module.default_project.root
+	return module.default_project
 end
 
 return module
