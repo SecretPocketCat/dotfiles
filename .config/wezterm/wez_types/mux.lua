@@ -1,0 +1,15 @@
+---@meta
+
+---@class Mux
+---@field all_domains fun(): _.wezterm.MuxDomain[]
+---@field all_windows fun(): _.wezterm.MuxWindow[]
+---@field get_active_workspace fun(): string
+---@field get_domain fun(name_or_id: string | number | nil): _.wezterm.MuxDomain | nil
+---@field get_pane fun(pane_id: number): _.wezterm.Pane | nil
+---@field get_tab fun(tab_id: number): _.wezterm.MuxTab | nil
+---@field get_window fun(window_id: number): _.wezterm.MuxWindow | nil
+---@field get_workspace_names fun(): string[]
+---@field rename_workspace fun(old: string, new: string)
+---@field set_active_workspace fun(workspace: string)
+---@field set_default_domain fun(domain: _.wezterm.MuxDomain)
+---@field spawn_window fun(opts: { args: string[], cwd: string, set_environment_variables: table<string, string>, domain: { DomainName: string }, workspace: string, position: { x: number, y: number, origin?: 'ScreenCoordinateSystem' | 'MainScreen' | 'ActiveScreen' | { Named: string } } }): _.wezterm.MuxTab, _.wezterm.Pane, _.wezterm.MuxWindow
