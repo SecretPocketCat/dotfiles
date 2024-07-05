@@ -1,9 +1,11 @@
 local project = require("project")
+local utils = require("utils")
 ---@type WezTerm
 local wezterm = require("wezterm")
 local act = wezterm.action
 local mux = wezterm.mux
 
+local module = {}
 local config = wezterm.config_builder()
 config:set_strict_mode(true)
 
@@ -20,16 +22,9 @@ config.keys = {
 		action = act.ActivateCommandPalette,
 	},
 	{
-		key = "r",
+		key = "w",
 		mods = main_mod,
-		action = wezterm.action_callback(project.repo_select),
-	},
-	{
-		key = "r",
-		mods = main_mod_shifted,
-		action = wezterm.action_callback(function(win, pane)
-			project.repo_select(win, pane, true)
-		end),
+		action = wezterm.action_callback(project.workspace_select),
 	},
 	{
 		key = "s",
@@ -48,16 +43,16 @@ config.keys = {
 		mods = main_mod,
 		action = act.ScrollByPage(-0.8),
 	},
-	{
-		key = "e",
-		mods = main_mod,
-		action = act.ScrollByLine(1),
-	},
-	{
-		key = "i",
-		mods = main_mod,
-		action = act.ScrollByLine(-1),
-	},
+	-- {
+	-- 	key = "e",
+	-- 	mods = main_mod,
+	-- 	action = act.ScrollByLine(1),
+	-- },
+	-- {
+	-- 	key = "i",
+	-- 	mods = main_mod,
+	-- 	action = act.ScrollByLine(-1),
+	-- },
 	{
 		key = "b",
 		mods = main_mod,
@@ -73,15 +68,21 @@ config.keys = {
 		mods = main_mod,
 		action = act.ActivateTabRelative(-1),
 	},
+	-- {
+	-- 	key = "o",
+	-- 	mods = main_mod,
+	-- 	action = act.ActivateTabRelative(1),
+	-- },
+	-- {
+	-- 	key = "t",
+	-- 	mods = main_mod,
+	-- 	action = act.ShowLauncherArgs({ flags = "FUZZY|TABS" }),
+	-- },
+	-- tedo: replace by custom menu that has less noise and does not allow creating a new workspace
 	{
-		key = "o",
+		key = "a",
 		mods = main_mod,
-		action = act.ActivateTabRelative(1),
-	},
-	{
-		key = "t",
-		mods = main_mod,
-		action = act.ShowLauncherArgs({ flags = "FUZZY|TABS" }),
+		action = act.ShowLauncherArgs({ flags = "FUZZY|WORKSPACES" }),
 	},
 	-- {
 	-- 	key = "x",
@@ -89,6 +90,17 @@ config.keys = {
 	-- 	action = act.ShowDebugOverlay,
 	-- },
 }
+
+-- todo: this breaks on wez config save/reload
+for focusable, key in pairs(project.keys) do
+	table.insert(config.keys, {
+		key = key,
+		mods = main_mod,
+		action = wezterm.action_callback(function()
+			project.focus_ws_tab(focusable)
+		end),
+	})
+end
 
 -- todo: panes
 -- pane size="65%" focus=true name="editor" {{

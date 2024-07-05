@@ -4,8 +4,20 @@ local mux = wezterm.mux
 local act = wezterm.action
 local utils = require("utils")
 
+---@type table<FocusablePane, string>
+local keys = {
+	editor = "e",
+	term = "t",
+	git = "g",
+	filepicker = "f",
+	task = "o",
+	k9s = "k",
+	cheatsheet = "h",
+}
+
 local module = {
 	cancel_id = "cancel",
+	keys = keys,
 }
 
 ---@param root string
@@ -97,13 +109,10 @@ function module.get_repo_select_options(project_ws)
 	return options
 end
 
-function module.repo_select(window, pane, replace_tab, strict_cancel)
+function module.workspace_select(window, pane, strict_cancel)
 	local project_ws = module.pane_project(pane)
 	local project_options = module.get_repo_select_options(project_ws)
 	local title = "  " .. project_ws.root
-	if replace_tab then
-		title = title .. " REPLACE"
-	end
 
 	if strict_cancel then
 		title = title .. " (STRICT CANCEL)"
@@ -117,7 +126,7 @@ function module.repo_select(window, pane, replace_tab, strict_cancel)
 				if path and name and path ~= module.cancel_option.id then
 					module.open_project_workspace(window, path)
 				elseif strict_cancel and not name and not path then
-					module.repo_select(window, pane, replace_tab, strict_cancel)
+					module.workspace_select(window, pane, strict_cancel)
 				else
 					wezterm.log_info("Cancelled repo selection")
 				end
@@ -146,7 +155,7 @@ function module.open_project_workspace(window, path)
 			cwd = path,
 			args = { "hx", "." },
 		})
-		tab:set_title("hx")
+		tab:set_title(string.format("[%s] hx", module.keys.editor))
 
 		-- status
 		-- todo: actually base the cmd of this pane on the project type
@@ -162,31 +171,18 @@ function module.open_project_workspace(window, path)
 		})
 		status_pane:send_text("bacon clippy --summary \n")
 
-		-- additional tabs
-		local yazi_tab, yazi_pane = win:spawn_tab({
-			cwd = path,
-		})
-		yazi_tab:set_title("yazi")
-		yazi_pane:send_text("yazi . \n")
-
-		local git_tab = win:spawn_tab({
-			cwd = path,
-			args = { "lazygit" },
-		})
-		git_tab:set_title("git")
-
-		-- todo: use project filter from conf
-		local task_tab, task_pane = win:spawn_tab({
-			cwd = path,
-		})
-		task_tab:set_title("tasks")
-		task_pane:send_text("task \n")
-
-		local cheatsheet_tab, cheatsheet_pane = win:spawn_tab({
-			cwd = path,
-		})
-		cheatsheet_tab:set_title("cheatsheet")
-		cheatsheet_pane:send_text("glow ~/.config/helix/cheatsheet.md \n")
+		---@type WorkspaceCacheEntry
+		local cache = {
+			focusable = {
+				editor = editor_pane:pane_id(),
+				git = module.spawn_focusable_tab(win, path, "git", "lazygit"),
+				filepicker = module.spawn_focusable_tab(win, path, "filepicker", "yazi ."),
+				-- todo: use project filter from conf
+				task = module.spawn_focusable_tab(win, path, "task", "yazi ."),
+				cheatsheet = module.spawn_focusable_tab(win, path, "cheatsheet", "glow ~/.config/helix/cheatsheet.md"),
+			},
+		}
+		wezterm.GLOBAL[path] = cache
 
 		-- focus editor pane
 		editor_pane:activate()
@@ -195,9 +191,15 @@ function module.open_project_workspace(window, path)
 	mux.set_active_workspace(path)
 end
 
+---@param focusable FocusablePane
+function module.focus_ws_tab(focusable)
+	local ws = module.workspace_cache_entry()
+	mux.get_pane(ws.focusable[focusable]):activate()
+end
+
+---@param pane _.wezterm.Pane
 ---@return ProjectWorkspace
 function module.pane_project(pane)
-	---@type string
 	local cwd = pane:get_current_working_dir().file_path
 	if cwd and cwd ~= wezterm.home_dir then
 		for _, ws in ipairs(module.workspaces) do
@@ -208,6 +210,26 @@ function module.pane_project(pane)
 	end
 
 	return module.default_project
+end
+
+---@return WorkspaceCacheEntry
+function module.workspace_cache_entry()
+	return wezterm.GLOBAL[mux.get_active_workspace()]
+end
+
+---@param win _.wezterm.MuxWindow
+---@param path string
+---@param focusable FocusablePane
+---@param cmd string
+---@return number PaneId
+function module.spawn_focusable_tab(win, path, focusable, cmd)
+	local tab, pane = win:spawn_tab({
+		cwd = path,
+	})
+	tab:set_title(string.format("[%s] %s", keys[focusable], focusable))
+	pane:send_text(cmd .. " \n")
+
+	return pane:pane_id()
 end
 
 return module

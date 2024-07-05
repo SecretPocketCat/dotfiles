@@ -15,3 +15,8 @@
 ---@class ProjectOption
 ---@field id string Project path relative to home
 ---@field label string
+
+---@class WorkspaceCacheEntry
+---@field focusable table<FocusablePane, number>
+
+---@alias FocusablePane "editor" | "term" | "git" | "filepicker" | "task" | "k9s"| "cheatsheet"
