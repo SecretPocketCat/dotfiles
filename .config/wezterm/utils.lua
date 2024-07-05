@@ -104,4 +104,18 @@ function module.get_gui_pid()
 	return pinfo.pid
 end
 
+---@generic T
+---@param t { [T]: any }
+---@return T[]
+function module.sorted_keys(t)
+	local keys = {}
+
+	for k in pairs(t) do
+		table.insert(keys, k)
+	end
+
+	table.sort(keys)
+	return keys
+end
+
 return module

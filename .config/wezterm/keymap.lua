@@ -91,10 +91,9 @@ config.keys = {
 	-- },
 }
 
--- todo: this breaks on wez config save/reload
-for focusable, key in pairs(project.keys) do
+for _, focusable in ipairs(utils.sorted_keys(project.keys)) do
 	table.insert(config.keys, {
-		key = key,
+		key = project.keys[focusable],
 		mods = main_mod,
 		action = wezterm.action_callback(function()
 			project.focus_ws_tab(focusable)
