@@ -20,6 +20,24 @@ local module = {
 	keys = keys,
 }
 
+---@param pane _.wezterm.Pane
+---@param runnable RunnablePane
+local function check_cmd_running(pane, runnable)
+	local proc_info = pane:get_foreground_process_info()
+	-- todo: other shells, also Windows?
+	if proc_info and proc_info.executable:find("/usr/bin/fish") then
+		pane:activate()
+		pane:window():gui_window():perform_action(wezterm.action.CloseCurrentPane({ confirm = false }), pane)
+		module.focus_ws_tab("editor")
+		wezterm.GLOBAL[mux.get_active_workspace()].runnable[runnable] = nil
+		return
+	end
+	-- still running - recheck later
+	wezterm.time.call_after(0.25, function()
+		check_cmd_running(pane, runnable)
+	end)
+end
+
 ---@param root string
 ---@param root_task_project string
 ---@param nested_task_projects NestedTaskProjects?
@@ -76,12 +94,15 @@ function module.get_repo_select_options(project_ws)
 			)
 		)
 
+		wezterm.GLOBAL.workspace_names = {}
+
 		---@type ProjectOption[]
 		local repos = {}
 
 		for _, path in ipairs(repo_paths) do
 			-- parts of the regex are repeated, because {1,2} does not seem to work in lua
-			local name = path:match("[/\\][^/\\]+[/\\][^/\\]+$"):gsub(project_ws.root, "")
+			local name = path:match("[^/\\]+[/\\][^/\\]+$"):gsub(project_ws.root, "")
+			wezterm.GLOBAL.workspace_names[path] = name
 			---@type ProjectOption
 			local option = {
 				label = name,
@@ -173,13 +194,18 @@ function module.open_project_workspace(window, path)
 
 		---@type WorkspaceCacheEntry
 		local cache = {
+			cwd = path,
 			focusable = {
 				editor = editor_pane:pane_id(),
 				git = module.spawn_focusable_tab(win, path, "git", "lazygit"),
 				filepicker = module.spawn_focusable_tab(win, path, "filepicker", "yazi ."),
 				-- todo: use project filter from conf
-				task = module.spawn_focusable_tab(win, path, "task", "yazi ."),
+				task = module.spawn_focusable_tab(win, path, "task", "task"),
 				cheatsheet = module.spawn_focusable_tab(win, path, "cheatsheet", "glow ~/.config/helix/cheatsheet.md"),
+			},
+			runnable = {
+				run = nil,
+				build = nil,
 			},
 		}
 		wezterm.GLOBAL[path] = cache
@@ -230,6 +256,43 @@ function module.spawn_focusable_tab(win, path, focusable, cmd)
 	pane:send_text(cmd .. " \n")
 
 	return pane:pane_id()
+end
+
+---@param win _.wezterm.Window
+---@return number PaneId
+function module.run_project(win)
+	return module.spawn_run_tab(win, "run", "cargo run")
+end
+
+---@param win _.wezterm.Window
+---@param runnable RunnablePane
+---@param cmd string
+---@return number PaneId
+function module.spawn_run_tab(win, runnable, cmd)
+	local ws = module.workspace_cache_entry()
+	local pane_id = ws.runnable[runnable]
+	if pane_id then
+		local pane = mux.get_pane(pane_id)
+		if pane then
+			pane:activate()
+			return pane_id
+		end
+	end
+
+	local tab, pane = win:mux_window():spawn_tab({
+		cwd = ws.cwd,
+	})
+	tab:set_title(runnable)
+	pane:send_text(cmd .. " \n")
+
+	local new_pane_id = pane:pane_id()
+	wezterm.GLOBAL[mux.get_active_workspace()].runnable[runnable] = new_pane_id
+
+	wezterm.time.call_after(0.25, function()
+		check_cmd_running(pane, runnable)
+	end)
+
+	return new_pane_id
 end
 
 return module

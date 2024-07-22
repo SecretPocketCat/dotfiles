@@ -17,6 +17,9 @@
 ---@field label string
 
 ---@class WorkspaceCacheEntry
+---@field cwd string
 ---@field focusable table<FocusablePane, number>
+---@field runnable table<RunnablePane, number?>
 
 ---@alias FocusablePane "editor" | "term" | "git" | "filepicker" | "task" | "k9s"| "cheatsheet"
+---@alias RunnablePane "run" | "build"

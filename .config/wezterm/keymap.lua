@@ -22,6 +22,11 @@ config.keys = {
 		action = act.ActivateCommandPalette,
 	},
 	{
+		key = "r",
+		mods = main_mod,
+		action = wezterm.action_callback(project.run_project),
+	},
+	{
 		key = "w",
 		mods = main_mod,
 		action = wezterm.action_callback(project.workspace_select),

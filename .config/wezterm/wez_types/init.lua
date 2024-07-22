@@ -135,6 +135,8 @@ local wezterm = {
 	log_warn = function(arg, ...) end,
 
 	---@overload fun(event_name: 'format-tab-title', callback: fun(tab: _.wezterm.TabInformation, tabs: _.wezterm.TabInformation[], panes: _.wezterm.PaneInformation, config: table, hover: boolean, max_width: integer): string | _.wezterm.FormatItem[]): nil
+	---@overload fun(event_name: 'format-window-title', callback: fun(tab: _.wezterm.TabInformation, tabs: _.wezterm.TabInformation[], panes: _.wezterm.PaneInformation, config: table, hover: boolean, max_width: integer): string | _.wezterm.FormatItem[]): nil
+	---@overload fun(event_name: 'update-status', callback: fun(window: _.wezterm.Window, pane: _.wezterm.Pane): nil): nil
 	---@overload fun(event_name: 'update-right-status', callback: fun(window: _.wezterm.Window, pane: _.wezterm.Pane): nil): nil
 	---@overload fun(event_name: 'window-config-reloaded', callback: fun(window: _.wezterm.Window, pane: _.wezterm.Pane): nil): nil
 	on = function(event_name, callback) end,

@@ -1,5 +1,6 @@
 ---@type WezTerm
 local wezterm = require("wezterm")
+local mux = wezterm.mux
 local utils = require("utils")
 
 local config = wezterm.config_builder()
@@ -13,6 +14,10 @@ config.tab_max_width = 50
 local divider = utf8.char(0xe0bc)
 -- arrow
 -- local divider = utf8.char(0xe0b0)
+
+wezterm.on("format-window-title", function(tab, tabs, _panes, conf, _hover, _max_width)
+	return mux.get_active_workspace()
+end)
 
 wezterm.on("format-tab-title", function(tab, tabs, _panes, conf, _hover, _max_width)
 	local colours = conf.resolved_palette.tab_bar
@@ -88,6 +93,31 @@ wezterm.on("format-tab-title", function(tab, tabs, _panes, conf, _hover, _max_wi
 		{ Foreground = { Color = e_fg } },
 		{ Text = divider },
 	}
+end)
+
+wezterm.on("update-status", function(window, pane)
+	local ws_names = wezterm.GLOBAL.workspace_names
+
+	if ws_names then
+		---@type _.wezterm.Palette
+		local palette = window:effective_config().resolved_palette
+
+		---@type _.wezterm.FormatItem[]
+		local items = {}
+		for _, ws in ipairs(mux.get_workspace_names()) do
+			table.insert(items, {
+				Background = {
+					Color = mux.get_active_workspace() == ws and palette.ansi[2] or palette.ansi[1],
+				},
+			})
+			table.insert(items, {
+				-- Text = ws_names[ws],
+				-- todo: cached name or similar
+				Text = ws,
+			})
+		end
+		window:set_right_status(wezterm.format(items))
+	end
 end)
 
 return config
