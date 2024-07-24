@@ -24,7 +24,16 @@ config.keys = {
 	{
 		key = "r",
 		mods = main_mod,
-		action = wezterm.action_callback(project.run_project),
+		action = wezterm.action_callback(function(win)
+			project.run_project(win, true)
+		end),
+	},
+	{
+		key = "r",
+		mods = main_mod_shifted,
+		action = wezterm.action_callback(function(win)
+			project.run_project(win, false)
+		end),
 	},
 	{
 		key = "w",

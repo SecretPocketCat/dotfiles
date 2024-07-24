@@ -22,19 +22,25 @@ local module = {
 
 ---@param pane _.wezterm.Pane
 ---@param runnable RunnablePane
-local function check_cmd_running(pane, runnable)
+---@return boolean
+local function is_shell_pane(pane, runnable)
 	local proc_info = pane:get_foreground_process_info()
 	-- todo: other shells, also Windows?
-	if proc_info and proc_info.executable:find("/usr/bin/fish") then
-		pane:activate()
-		pane:window():gui_window():perform_action(wezterm.action.CloseCurrentPane({ confirm = false }), pane)
+	return proc_info ~= nil and proc_info.executable:find("/usr/bin/fish") ~= nil
+end
+
+---@param pane _.wezterm.Pane
+---@param runnable RunnablePane
+local function close_pane_when_cmd_not_running(pane, runnable)
+	if is_shell_pane(pane, runnable) then
+		utils.close_pane(pane)
 		module.focus_ws_tab("editor")
 		wezterm.GLOBAL[mux.get_active_workspace()].runnable[runnable] = nil
 		return
 	end
 	-- still running - recheck later
 	wezterm.time.call_after(0.25, function()
-		check_cmd_running(pane, runnable)
+		close_pane_when_cmd_not_running(pane, runnable)
 	end)
 end
 
@@ -197,6 +203,7 @@ function module.open_project_workspace(window, path)
 			cwd = path,
 			focusable = {
 				editor = editor_pane:pane_id(),
+				term = module.spawn_focusable_tab(win, path, "term", ""),
 				git = module.spawn_focusable_tab(win, path, "git", "lazygit"),
 				filepicker = module.spawn_focusable_tab(win, path, "filepicker", "yazi ."),
 				-- todo: use project filter from conf
@@ -246,36 +253,46 @@ end
 ---@param win _.wezterm.MuxWindow
 ---@param path string
 ---@param focusable FocusablePane
----@param cmd string
+---@param cmd string?
 ---@return number PaneId
 function module.spawn_focusable_tab(win, path, focusable, cmd)
 	local tab, pane = win:spawn_tab({
 		cwd = path,
 	})
 	tab:set_title(string.format("[%s] %s", keys[focusable], focusable))
-	pane:send_text(cmd .. " \n")
+
+	if cmd then
+		pane:send_text(cmd .. " \n")
+	end
 
 	return pane:pane_id()
 end
 
 ---@param win _.wezterm.Window
+---@param autoclose boolean
 ---@return number PaneId
-function module.run_project(win)
-	return module.spawn_run_tab(win, "run", "cargo run")
+function module.run_project(win, autoclose)
+	return module.spawn_run_tab(win, "run", "cargo run", autoclose)
 end
 
 ---@param win _.wezterm.Window
 ---@param runnable RunnablePane
 ---@param cmd string
+---@param autoclose boolean
 ---@return number PaneId
-function module.spawn_run_tab(win, runnable, cmd)
+function module.spawn_run_tab(win, runnable, cmd, autoclose)
 	local ws = module.workspace_cache_entry()
 	local pane_id = ws.runnable[runnable]
 	if pane_id then
 		local pane = mux.get_pane(pane_id)
 		if pane then
-			pane:activate()
-			return pane_id
+			if autoclose and is_shell_pane(pane, runnable) then
+				utils.close_pane(pane)
+				module.focus_ws_tab("editor")
+			else
+				pane:activate()
+				return pane_id
+			end
 		end
 	end
 
@@ -288,9 +305,11 @@ function module.spawn_run_tab(win, runnable, cmd)
 	local new_pane_id = pane:pane_id()
 	wezterm.GLOBAL[mux.get_active_workspace()].runnable[runnable] = new_pane_id
 
-	wezterm.time.call_after(0.25, function()
-		check_cmd_running(pane, runnable)
-	end)
+	if autoclose then
+		wezterm.time.call_after(1.0, function()
+			close_pane_when_cmd_not_running(pane, runnable)
+		end)
+	end
 
 	return new_pane_id
 end

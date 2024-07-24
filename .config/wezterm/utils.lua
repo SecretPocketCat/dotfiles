@@ -1,5 +1,6 @@
 ---@type WezTerm
 local wezterm = require("wezterm")
+local mux = wezterm.mux
 
 local module = {}
 
@@ -116,6 +117,20 @@ function module.sorted_keys(t)
 
 	table.sort(keys)
 	return keys
+end
+
+---@param pane _.wezterm.Pane
+function module.close_pane(pane)
+	pane:activate()
+	pane:window():gui_window():perform_action(wezterm.action.CloseCurrentPane({ confirm = false }), pane)
+end
+
+---@param pane_id number
+function module.close_pane_by_id(pane_id)
+	local pane = mux.get_pane(pane_id)
+	if pane then
+		module.close_pane(pane)
+	end
 end
 
 return module
