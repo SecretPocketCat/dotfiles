@@ -1,3 +1,15 @@
 
-valid_projects = ["l", "work", "bace", "gamedev", "bevy", "home", "misc", "kb", "bank", "friends", "stash", "wavedash"]
+valid_projects = [
+  "l",
+  "work",
+  # gamedev
+  "gd",
+  "bevy",
+  "home",
+  "misc",
+  "kb",
+  "bank",
+  "friends",
+  "stash",
+]
 valid_tags = []
