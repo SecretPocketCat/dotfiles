@@ -6,6 +6,12 @@ alias zl zellij
 alias c wl-copy
 alias t task
 
+function tl
+    set -l cmd "task list $argv"
+    set cmd (string replace -r '@' 'project:' -- $cmd)
+    eval $cmd
+end
+
 function ta
     command task add $argv
 end
