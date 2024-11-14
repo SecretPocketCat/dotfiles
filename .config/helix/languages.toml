@@ -2,3 +2,13 @@
 name = "lua"
 formatter = { command = "stylua", args = ["-"] } # - to read from stdin
 auto-format = true
+
+[[language]]
+name = "toml"
+formatter = { command = "taplo", args = ["fmt", "-"] }
+auto-format = true
+
+[[language]]
+name = "c-sharp"
+formatter = { command = "dotnet", args = ["format"] }
+auto-format = true
