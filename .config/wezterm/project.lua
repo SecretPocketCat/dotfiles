@@ -167,12 +167,31 @@ function module.workspace_select(window, pane, strict_cancel)
 	)
 end
 
+--- Read the optional workspace configuration
+---@param path string
+---@return WorkspaceConfiguration?
+function module.read_workspace_config(path)
+	local config_filename = "wavedash.settings.json"
+	-- hidden either in the vscode or jetbrains config dir
+	local file = io.open(path .. "/.vscode/" .. config_filename)
+	if not file then
+		file = io.open(path .. "/.idea/" .. config_filename)
+	end
+	if not file then
+		return nil
+	end
+	local text = file:read("*a") -- read the whole file
+	file:close()
+
+	return wezterm.json_parse(text)
+end
+
 --- Open project workspace
 ---@param window _.wezterm.Window
 ---@param path string
 function module.open_project_workspace(window, path)
 	if window:active_workspace() == path then
-		-- workspace already openede & focused - bail
+		-- workspace already opened & focused - bail
 		return
 	end
 
@@ -184,23 +203,44 @@ function module.open_project_workspace(window, path)
 		})
 		tab:set_title(string.format("[%s] hx", module.keys.editor))
 
+		-- workspace config
+		local ws_config = module.read_workspace_config(path)
+
 		-- status
-		-- todo: actually base the cmd of this pane on the project type
-		-- & possibly just skip it if it doesn't need one
-		--  =>
-		-- bacon for rust (cargo.toml)
-		-- glow for md (possible split might be different than regular code)
-		-- ??? for web (package.json)
-		local status_pane = editor_pane:split({
-			direction = "Right",
-			size = 0.325,
-			cwd = path,
-		})
-		status_pane:send_text("bacon clippy --summary \n")
+		-- todo: get
+		---@type WorkspaceType
+		local workspace_type =
+			utils.execute_command(wezterm.config_dir .. "/wezterm_helper workspace-type --path '" .. path .. "'")
+
+		---@type string?
+		local status_cmd = (ws_config or {}).statusCmd
+		if status_cmd == nil then
+			if workspace_type == "tauri" then
+				status_cmd = "bacon clippy --path './src-tauri' --summary \n"
+			elseif workspace_type == "cargo" then
+				status_cmd = "bacon clippy --summary \n"
+			elseif workspace_type == "npm" then
+				-- todo: npm run ???
+			end
+		end
+
+		---@type number?
+		local status_pane_id
+		if not utils.nil_or_empty(status_cmd) then
+			local status_pane = editor_pane:split({
+				direction = "Right",
+				size = 0.325,
+				cwd = path,
+			})
+			status_pane:send_text(status_cmd .. " \n")
+			status_pane_id = status_pane:pane_id()
+		end
 
 		---@type WorkspaceCacheEntry
 		local cache = {
 			cwd = path,
+			type = workspace_type,
+			status_pane_id = status_pane_id,
 			focusable = {
 				editor = editor_pane:pane_id(),
 				term = module.spawn_focusable_tab(win, path, "term", ""),

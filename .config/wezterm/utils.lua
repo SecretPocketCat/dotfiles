@@ -23,6 +23,20 @@ function module.notify(text)
 	module.execute_command("notify-send -t 100000 -u low " .. text)
 end
 
+---@param text string
+---@param needle string
+---@return boolean
+function module.starts_with(text, needle)
+	return text:sub(1, #needle) == needle
+end
+
+---@param text string
+---@param needle string
+---@return boolean
+function module.ends_with(text, needle)
+	return needle == "" or text:sub(-#needle) == needle
+end
+
 function module.split(str, sep)
 	local t = {}
 	if not str then
